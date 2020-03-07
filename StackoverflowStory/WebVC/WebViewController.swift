@@ -27,16 +27,6 @@ class WebViewController: UIViewController {
         webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     func navigateToQuestions() {
         performSegue(withIdentifier: "qList", sender: nil)
     }
@@ -55,7 +45,20 @@ extension WebViewController: WKNavigationDelegate {
                 let tokenExtra = seperateEqual[1]
                 let seperateAnd = tokenExtra.components(separatedBy: "&")
                 if !seperateAnd[0].isEmpty {
-                    URLBuilder.newAccessToken = seperateAnd[0]
+                    //store below in core data or keychain
+                    //URLBuilder.newAccessToken = seperateAnd[0]
+                    
+                    let coreToken = AccessModel()
+                    //coreToken.token = seperateAnd[0]
+                    
+                    let totalTokens = CoreDataFetchOps.shared.getAllToken()
+                    
+                    if totalTokens.count == 1 {
+                        // MARK: update token here
+                        CoreDataUpdateOps.shared.updateToken(accessToken: seperateAnd[0])
+                    } else {
+                        CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
+                    }
                     print("in this area")
                     performSegue(withIdentifier: "qList", sender: nil)
                 }

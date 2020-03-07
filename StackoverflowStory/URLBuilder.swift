@@ -17,6 +17,6 @@ struct URLBuilder {
     static let authUrlFull = URLBuilder.authBaseUrl + URLBuilder.clientId + URLBuilder.scope + URLBuilder.redirectUri + URLBuilder.key + Token.token
     static let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
         static let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
-    static var newAccessToken = ""
+    static var newAccessToken = CoreDataFetchOps.shared.getAccessToken()?.token
     static let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access&redirect_uri=https://stackexchange.com/oauth/login_success"
 }

@@ -17,6 +17,7 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var checkmark: UIImageView!
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
