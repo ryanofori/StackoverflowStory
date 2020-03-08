@@ -19,4 +19,15 @@ extension UIViewController {
         }
         task.resume()
     }
+    
+    //result
+    //be a singleton
+//    func loadData(urlString: String, completed: @escaping (Data) -> Void) {
+//        guard let url = URL(string: urlString) else { return }
+//        let task = URLSession.shared.dataTask(with: url) { data, response, error) in
+//            guard let data = data else { return }
+//            completion(data)
+//        }task.resume
+//    }
+    
 }

@@ -9,6 +9,7 @@ import LocalAuthentication
 import UIKit
 
 class LoginViewController: UIViewController {
+    var itemsObject = [Items]()
     
     @IBAction func webBtn(_ sender: Any) {
         performSegue(withIdentifier: "web", sender: nil)
@@ -20,7 +21,17 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //performAuthOrFallback()
+        getStringToJson(urlString: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + (URLBuilder.newAccessToken) + URLBuilder.key) { (info) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseQuestions.self, from: info)
+                self.itemsObject = root.items
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        print("https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + (URLBuilder.newAccessToken) + URLBuilder.key)
+        performAuthOrFallback()
     }
     
     func performAuthOrFallback(_ fallback: Bool = false) {
@@ -32,12 +43,11 @@ class LoginViewController: UIViewController {
         }
         //&error is address of error
         if context.canEvaluatePolicy(policy, error: &error) {
-            context.evaluatePolicy(policy, localizedReason: "Need bio auth")
-            { success, autError in DispatchQueue.main.async {
+            context.evaluatePolicy(policy, localizedReason: "Need bio auth"){ success, autError in DispatchQueue.main.async {
                 if success {
                     print("you are in")
-                    self.performSegue(withIdentifier: "Info", sender: nil)
-                    //self.navigateToSecondVC()
+                    self.obtainedInfo()
+                    //self.performSegue(withIdentifier: "Info", sender: nil)
                 } else {
                     self.performAuthOrFallback(true)
                 }
@@ -47,8 +57,23 @@ class LoginViewController: UIViewController {
             self.performAuthOrFallback(true)
         }
     }
+    
+    func obtainedInfo() {
+        print(itemsObject.count)
+        if itemsObject.count == 0 {
+            performSegue(withIdentifier: "web", sender: nil)
+        } else {
+            performSegue(withIdentifier: "info", sender: nil)
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let webVC = segue.destination as? WebViewController
         webVC?.passedUrl = URLBuilder.oauth2PostgetAcceesTokenURL
+        let questListVC = segue.destination as? QuestionListVC
+        //Passed Items abject here
+        questListVC?.filteredArray = itemsObject
+        print("all Totoal")
+        print(itemsObject.count)
     }
 }

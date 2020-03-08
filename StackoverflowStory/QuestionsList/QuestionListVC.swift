@@ -29,14 +29,21 @@ class QuestionListVC: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         print(URLBuilder.newAccessToken)
-        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + Token.token + URLBuilder.key) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
-            guard let data = data else { return }
-            self.parseJSON(data: data)
-        })
-        task.resume()
+        print(itemsArray.count)
+        if filteredArray.count == 0 {
+            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + Token.token + URLBuilder.key) else { return }
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
+                guard let data = data else { return }
+                self.parseJSON(data: data)
+            })
+            task.resume()
+        } else {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func parseJSON(data: Data) {
@@ -61,7 +68,8 @@ class QuestionListVC: UIViewController {
         questionNAnswerVC?.questionNAnswerArray = filteredArray
     }
     
-    @objc func fav() {
+    @objc
+    func fav() {
         performSegue(withIdentifier: "quest", sender: nil)
     }
     
