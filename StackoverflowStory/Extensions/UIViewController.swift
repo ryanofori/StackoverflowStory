@@ -37,9 +37,12 @@ extension UIViewController {
             }
             if let data = data {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    print("This is an error and that is bad")
-                    print(json)
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    //print(json)
+                    if let errorMessage = json?["error_message"] as? String? {
+                        let errorTitle = json?["error_message"] as? String
+                        self.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "")
+                    }
                 } catch {
                     print(error)
                 }
