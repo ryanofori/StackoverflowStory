@@ -22,7 +22,6 @@
 		7D5502DC2410C0EE003EFD5D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502DB2410C0EE003EFD5D /* CoreDataManager.swift */; };
 		7D5502E02410CA36003EFD5D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502DF2410CA36003EFD5D /* WebViewController.swift */; };
 		7D5502E22410CBE3003EFD5D /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E12410CBE3003EFD5D /* URLBuilder.swift */; };
-		7D5502E42410CC3D003EFD5D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E32410CC3D003EFD5D /* Token.swift */; };
 		7D5502E8241101C1003EFD5D /* QuestionListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E7241101C1003EFD5D /* QuestionListVC.swift */; };
 		7D5502EA241101ED003EFD5D /* QuestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E9241101ED003EFD5D /* QuestionTableViewCell.swift */; };
 		7D5502ED24110679003EFD5D /* ParseQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502EC24110679003EFD5D /* ParseQuestions.swift */; };
@@ -39,6 +38,7 @@
 		7D5503082412C5D6003EFD5D /* CoreDataDeleteOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503072412C5D6003EFD5D /* CoreDataDeleteOps.swift */; };
 		7D55030A2412C642003EFD5D /* CoreDataUpdateOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503092412C642003EFD5D /* CoreDataUpdateOps.swift */; };
 		7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030C24142527003EFD5D /* NetworkManager.swift */; };
+		7D55030F2415D5BA003EFD5D /* ParseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030E2415D5B9003EFD5D /* ParseUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +81,6 @@
 		7D5502DB2410C0EE003EFD5D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		7D5502DF2410CA36003EFD5D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		7D5502E12410CBE3003EFD5D /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
-		7D5502E32410CC3D003EFD5D /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Token.swift; path = ../Token.swift; sourceTree = "<group>"; };
 		7D5502E7241101C1003EFD5D /* QuestionListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionListVC.swift; sourceTree = "<group>"; };
 		7D5502E9241101ED003EFD5D /* QuestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionTableViewCell.swift; sourceTree = "<group>"; };
 		7D5502EC24110679003EFD5D /* ParseQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseQuestions.swift; sourceTree = "<group>"; };
@@ -98,6 +97,7 @@
 		7D5503072412C5D6003EFD5D /* CoreDataDeleteOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataDeleteOps.swift; sourceTree = "<group>"; };
 		7D5503092412C642003EFD5D /* CoreDataUpdateOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataUpdateOps.swift; sourceTree = "<group>"; };
 		7D55030C24142527003EFD5D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		7D55030E2415D5B9003EFD5D /* ParseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +166,7 @@
 				7D550269240EEB75003EFD5D /* LaunchScreen.storyboard */,
 				7D55026C240EEB75003EFD5D /* Info.plist */,
 				7D5502EC24110679003EFD5D /* ParseQuestions.swift */,
+				7D55030E2415D5B9003EFD5D /* ParseUser.swift */,
 			);
 			path = StackoverflowStory;
 			sourceTree = "<group>";
@@ -277,7 +278,6 @@
 			children = (
 				7D55030C24142527003EFD5D /* NetworkManager.swift */,
 				7D5502E12410CBE3003EFD5D /* URLBuilder.swift */,
-				7D5502E32410CC3D003EFD5D /* Token.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -449,13 +449,13 @@
 				7D550260240EEB70003EFD5D /* LoginViewController.swift in Sources */,
 				7D5503082412C5D6003EFD5D /* CoreDataDeleteOps.swift in Sources */,
 				7D5502FE24128E73003EFD5D /* FavWebViewController.swift in Sources */,
+				7D55030F2415D5BA003EFD5D /* ParseUser.swift in Sources */,
 				7D55030A2412C642003EFD5D /* CoreDataUpdateOps.swift in Sources */,
 				7D5502D62410BE12003EFD5D /* Data.swift in Sources */,
 				7D5502FB24128125003EFD5D /* UIViewController.swift in Sources */,
 				7D5502E22410CBE3003EFD5D /* URLBuilder.swift in Sources */,
 				7D5502EA241101ED003EFD5D /* QuestionTableViewCell.swift in Sources */,
 				7D55025C240EEB70003EFD5D /* AppDelegate.swift in Sources */,
-				7D5502E42410CC3D003EFD5D /* Token.swift in Sources */,
 				7D5502F7241273AD003EFD5D /* FavoriteTableViewCell.swift in Sources */,
 				7D5502E8241101C1003EFD5D /* QuestionListVC.swift in Sources */,
 				7D550266240EEB70003EFD5D /* StackoverflowStory.xcdatamodeld in Sources */,

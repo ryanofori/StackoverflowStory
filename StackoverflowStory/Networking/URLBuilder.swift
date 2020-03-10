@@ -14,7 +14,7 @@ struct URLBuilder {
     static let scope = "&scope=write_access"
     static let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
     static let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
-    static let authUrlFull = URLBuilder.authBaseUrl + URLBuilder.clientId + URLBuilder.scope + URLBuilder.redirectUri + URLBuilder.key + Token.token
+    static let authUrlFull = URLBuilder.authBaseUrl + URLBuilder.clientId + URLBuilder.scope + URLBuilder.redirectUri + URLBuilder.key + URLBuilder.newAccessToken
     static let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
         static let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
     static var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")

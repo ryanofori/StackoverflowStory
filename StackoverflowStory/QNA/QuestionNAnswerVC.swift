@@ -11,10 +11,12 @@ import UIKit
 class QuestionNAnswerVC: UIViewController {
     @IBOutlet weak var qNATableView: UITableView!
     @IBOutlet weak var postAnswerTxt: UITextField!
+    @IBOutlet weak var answerTxt: UITextField!
     var questionNAnswerArray = [Items]()
     var mainIndex = 0
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
+    var isFavortied = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +25,12 @@ class QuestionNAnswerVC: UIViewController {
     }
     
     @IBAction func postAnswerBtn(_ sender: Any) {
-        postFunc()
+        //postFunc()
+        let bodyText = "&body=" + (answerTxt.text ?? "")
+        if answerTxt.text?.count ?? 0 < 30 {
+            showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
+        }
+        postFunc(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
     }
     
     func sectionManager() {
@@ -40,19 +47,15 @@ class QuestionNAnswerVC: UIViewController {
             }
         }
     }
-    
+    //for favs
     func postFunc() {
-        let param: [String: String] = ["key": "tUo34InxiBQXN3La2wI7Bw((",  "access_token": "Wk2E5egkdj(sYLgus*g(2Q))", "site": "stackoverflow.com"]
-        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions/25827033/favorite") else { return }
+        let param: String = "key=tUo34InxiBQXN3La2wI7Bw((" + "&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))" + "&site=stackoverflow.com"
+        let data = param.data(using: .utf8)
+        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions/25827033/favorite/") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        do {
-            let data = try JSONSerialization.data(withJSONObject: param, options: [])
-            request.httpBody = data
-        } catch {
-            print(error)
-        }
+        request.httpBody = data
         let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
             if let response = response {
                 print(response)
@@ -111,6 +114,9 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                     cell?.profileImage.image = UIImage(data: data)
                 }
             }
+            cell?.favBtn.isHidden = false
+            cell?.favBtn.addTarget(self, action: #selector(switcher), for: .touchUpInside)
+            
         } else {
             let indexType = indexPath.row
             cell?.title.text = ""
@@ -129,6 +135,7 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                     cell?.profileImage.image = UIImage(data: data)
                 }
             }
+            cell?.favBtn.isHidden = true
         }
         return cell ?? UITableViewCell()
     }
@@ -139,4 +146,20 @@ extension QuestionNAnswerVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionAmountArray.count
     }
+    
+    @objc
+    func switcher(sender: UIButton) {
+        
+//        print(questionNAnswerArray[indexPath.row])
+//        if isFavortied == false {
+//            isFavortied = true
+//        } else {
+//            isFavortied = false
+//        }
+        // MARK: Switch color fill
+        // MARK: Add core data after here
+        //        let cell = self.tableView.cellForRow(at: indexPath) as! UITableViewCell
+        //        print(cell.itemLabel.text)//print or get item
+    }
+    
 }

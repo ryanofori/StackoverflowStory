@@ -9,28 +9,32 @@ import LocalAuthentication
 import UIKit
 
 class LoginViewController: UIViewController {
-    var itemsObject = [Items]()
+    var userId = 0
     
     @IBAction func webBtn(_ sender: Any) {
         performSegue(withIdentifier: "web", sender: nil)
     }
-    
     @IBAction func infoBtn(_ sender: Any) {
         performSegue(withIdentifier: "info", sender: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getStringToJson(urlString: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + (URLBuilder.newAccessToken) + URLBuilder.key) { (info) in
+        //check if access token works
+        getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (info) in
             let jsonDecoder = JSONDecoder()
             do {
-                let root = try jsonDecoder.decode(ParseQuestions.self, from: info)
-                self.itemsObject = root.items
+                let root = try jsonDecoder.decode(ParseUser.self, from: info)
+                print(root.items[0].user_id)
+                self.userId = root.items[0].user_id ?? 0
+                print("something else is happening")
+                print(self.userId)
             } catch {
+                self.userId = 0
                 print(error.localizedDescription)
             }
         }
-        print("https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + (URLBuilder.newAccessToken) + URLBuilder.key)
+        
         performAuthOrFallback()
     }
     
@@ -43,24 +47,24 @@ class LoginViewController: UIViewController {
         }
         //&error is address of error
         if context.canEvaluatePolicy(policy, error: &error) {
-            context.evaluatePolicy(policy, localizedReason: "Need bio auth"){ success, autError in DispatchQueue.main.async {
+            context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in DispatchQueue.main.async {
                 if success {
                     print("you are in")
                     self.obtainedInfo()
-                    //self.performSegue(withIdentifier: "Info", sender: nil)
                 } else {
                     self.performAuthOrFallback(true)
                 }
+                }
             }
-            }
+            
         } else {
             self.performAuthOrFallback(true)
         }
     }
     
     func obtainedInfo() {
-        print(itemsObject.count)
-        if itemsObject.count == 0 {
+        print(userId)
+        if userId == 0 {
             performSegue(withIdentifier: "web", sender: nil)
         } else {
             performSegue(withIdentifier: "info", sender: nil)
@@ -70,10 +74,8 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let webVC = segue.destination as? WebViewController
         webVC?.passedUrl = URLBuilder.oauth2PostgetAcceesTokenURL
-        let questListVC = segue.destination as? QuestionListVC
-        //Passed Items abject here
-        questListVC?.filteredArray = itemsObject
-        print("all Totoal")
-        print(itemsObject.count)
+        let favVC = segue.destination as? FavoriteVC
+        favVC?.passedUserId = userId
+        
     }
 }

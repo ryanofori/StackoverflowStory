@@ -19,8 +19,10 @@ struct Items: Codable {
     var answer_count: Int
     var score: Int?
     var question_id: Int?
+    var link: String?
     var title: String?
     var body: String?
+    var user_id: Int?
 }
 struct Answers: Codable {
     var owner: Owner?

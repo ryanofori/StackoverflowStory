@@ -10,34 +10,99 @@ import UIKit
 
 class FavoriteVC: UIViewController {
     
+    @IBOutlet weak var favTableView: UITableView!
+    //first below?
     var favArray = [Items]()
+    //var retryUserId = 0
+    var passedUserId = 0
+    var favURL = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(passedUserId)
+        if passedUserId == 0 {
+            //failed to get iDNumber
+            //get iDNumber again
+            getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (info) in
+                let jsonDecoder = JSONDecoder()
+                do {
+                    let root = try jsonDecoder.decode(ParseUser.self, from: info)
+                    self.passedUserId = root.items[0].user_id ?? 0
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            print(passedUserId)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                print("thos may work")
+                print(self.passedUserId)
+                self.getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (data) in
+                    let jsonDecoder = JSONDecoder()
+                    do {
+                        let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                        //            let itemsGroup = root.items[0]
+                        print("if favArray")
+                        print(root.items.count)
+                        self.favArray = root.items
+                        DispatchQueue.main.async {
+                            self.favTableView.reloadData()
+                        }
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+            
+            //then show favs
+        } else {
+            //got the person's iDNumber
+            //Now show there favs using
+            //currently will never be called unless you can get the userID
+            getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (data) in
+                let jsonDecoder = JSONDecoder()
+                do {
+                    let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                    //            let itemsGroup = root.items[0]
+                    print("else favArray")
+                    print(root.items.count)
+                    self.favArray = root.items
+                    DispatchQueue.main.async {
+                        self.favTableView.reloadData()
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let webVC = segue.destination as? WebViewController
-        //
-        webVC?.passedUrl = "https://www.google.com/"
+        let webVC = segue.destination as? FavWebViewController
+        print(favURL)
+        webVC?.passedUrl = favURL
     }
 }
 
 extension FavoriteVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        favURL = favArray[indexPath.row].link ?? ""
         performSegue(withIdentifier: "favWeb", sender: nil)
     }
 }
 extension FavoriteVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return favArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "favCell") as? FavoriteTableViewCell
-        cell?.favTitle.text = "1"
+        cell?.favTitle.text = favArray[indexPath.row].title?.html2String
         return cell ?? UITableViewCell()
     }
+    
+    //optional (delte if you can't get to it)
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }

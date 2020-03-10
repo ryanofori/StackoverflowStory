@@ -18,6 +18,8 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
     
+    @IBOutlet weak var favBtn: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

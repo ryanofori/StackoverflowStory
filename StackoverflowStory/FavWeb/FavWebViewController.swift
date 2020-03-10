@@ -12,11 +12,12 @@ import WebKit
 class FavWebViewController: UIViewController {
     
     @IBOutlet weak var favWebView: WKWebView!
-    var passedUrl = "https://www.google.com"
+    
+    var passedUrl = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(passedUrl)
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         favWebView.load(request)

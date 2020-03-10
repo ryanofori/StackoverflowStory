@@ -30,8 +30,7 @@ class QuestionListVC: UIViewController {
         self.tableView.dataSource = self
         print(URLBuilder.newAccessToken)
         print(itemsArray.count)
-        if filteredArray.count == 0 {
-            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + Token.token + URLBuilder.key) else { return }
+            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) else { return }
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
@@ -39,11 +38,7 @@ class QuestionListVC: UIViewController {
                 self.parseJSON(data: data)
             })
             task.resume()
-        } else {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        
     }
     
     func parseJSON(data: Data) {
@@ -124,22 +119,6 @@ extension QuestionListVC: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "qCell") as? QuestionTableViewCell
         cell?.questionTxt.text = filteredArray[indexPath.row].title?.html2String
         return cell ?? UITableViewCell()
-    }
-    @objc
-    func switcher(sender: UIButton) {
-        let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-        let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
-        print("I found you!")
-        print(indexPath?.row)
-        if favSwitcher == false {
-            favSwitcher = true
-        } else {
-            favSwitcher = false
-        }
-        // MARK: Switch color fill
-        // MARK: Add core data after here
-        //        let cell = self.tableView.cellForRow(at: indexPath) as! UITableViewCell
-        //        print(cell.itemLabel.text)//print or get item
     }
 }
 

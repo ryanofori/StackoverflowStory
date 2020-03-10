@@ -95,6 +95,7 @@ identifier_name:
     - question_id
     - profile_image
     - display_name
+    - user_id
 number_separator:
   minimum_length: 5
 file_name:
