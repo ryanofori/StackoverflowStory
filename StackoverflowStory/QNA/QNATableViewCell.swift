@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol QNACellDelegete {
+    func didTapUpVote(tag: Int)
+    func didTapDownVote()
+    func didTapFav()
+}
+
 class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var score: UILabel!
     @IBOutlet weak var title: UILabel!
@@ -18,8 +24,27 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
     
+    var cellItems = [Items]()
+    var cellDelegate: QNACellDelegete?
+    func passItems(item: [Items]) {
+        cellItems = item
+    }
+    
+    @IBOutlet weak var upVote: UIButton!
+    @IBAction func upVote(_ sender: Any) {
+        cellDelegate?.didTapUpVote(tag: (sender as AnyObject).tag)
+    }
+    
+    @IBOutlet weak var downVote: UIButton!
+    @IBAction func downVote(_ sender: Any) {
+        cellDelegate?.didTapDownVote()
+    }
+    
     @IBOutlet weak var favBtn: UIButton!
     
+    @IBAction func favBtn(_ sender: Any) {
+        cellDelegate?.didTapFav()
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

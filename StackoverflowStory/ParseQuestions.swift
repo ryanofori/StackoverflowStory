@@ -28,6 +28,7 @@ struct Answers: Codable {
     var owner: Owner?
     var is_accepted: Bool?
     var score: Int?
+    var answer_id: Int?
     var title: String?
     var body: String?
 }

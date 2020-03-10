@@ -17,11 +17,12 @@ class QuestionNAnswerVC: UIViewController {
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
     var isFavortied = false
+    var selectedRow = 0
+    var selectedSection = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sectionManager()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func postAnswerBtn(_ sender: Any) {
@@ -29,8 +30,9 @@ class QuestionNAnswerVC: UIViewController {
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
             showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
+        } else {
+            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
         }
-        postFunc(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
     }
     
     func sectionManager() {
@@ -84,8 +86,10 @@ extension QuestionNAnswerVC: UITableViewDelegate {
         let header = view as? UITableViewHeaderFooterView
         header?.textLabel?.textColor = .secondaryLabel
     }
+    
 }
 extension QuestionNAnswerVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return questionNAnswerArray[mainIndex].answer_count + 1
         return sectionAmountArray[section].count
@@ -94,6 +98,9 @@ extension QuestionNAnswerVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "aCell") as? QNATableViewCell
         cell?.profileName.textColor = .systemBlue
+        cell?.cellDelegate = self
+        cell?.upVote.tag = indexPath.row
+        //cell?.passItems(item: [questionNAnswerArray[indexPath.row]])
         if indexPath.section == 0 {
             cell?.title.text = questionNAnswerArray[mainIndex].title?.html2String
             cell?.title.font = .boldSystemFont(ofSize: 17.0)
@@ -115,8 +122,6 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                 }
             }
             cell?.favBtn.isHidden = false
-            cell?.favBtn.addTarget(self, action: #selector(switcher), for: .touchUpInside)
-            
         } else {
             let indexType = indexPath.row
             cell?.title.text = ""
@@ -147,19 +152,40 @@ extension QuestionNAnswerVC: UITableViewDataSource {
         return sectionAmountArray.count
     }
     
-    @objc
-    func switcher(sender: UIButton) {
-        
-//        print(questionNAnswerArray[indexPath.row])
-//        if isFavortied == false {
-//            isFavortied = true
+}
+extension QuestionNAnswerVC: QNACellDelegete {
+    func didTapUpVote(tag: Int) {
+        print("this is my tag")
+        print(tag)
+    }
+    
+    //pass the section and row here
+//    func didTapUpVote() {
+//        //question
+//        if selectedSection == 0 && selectedRow == 0 {
+//            print(questionNAnswerArray[mainIndex].owner?.display_name)
+//            print("section:")
+//
 //        } else {
-//            isFavortied = false
+//            print("row:")
+//            print(selectedRow)
+//            print(questionNAnswerArray[mainIndex].answers?[selectedRow].owner?.display_name)
 //        }
-        // MARK: Switch color fill
-        // MARK: Add core data after here
-        //        let cell = self.tableView.cellForRow(at: indexPath) as! UITableViewCell
-        //        print(cell.itemLabel.text)//print or get item
+//        //answer
+//
+//    }
+    
+    func didTapDownVote() {
+        //question
+        if selectedSection == 0 && selectedRow == 0 {
+            print("section- ")
+            print("row- ")
+        }
+        //answer
+    }
+    
+    func didTapFav() {
+        print("mainIndex")
     }
     
 }

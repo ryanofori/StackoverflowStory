@@ -19,7 +19,7 @@ class QuestionVC: UIViewController {
         let body = "&body=" + (bodyTxt.text ?? "")
         let tags = "&tags=" + (tagsTxt.text ?? "")
         let sendUrl = title + body + tags
-        if titleTxt.text?.count ?? 0 <  15 {
+        if titleTxt.text?.count ?? 0 < 15 {
             showAlert(mesageTitle: "Alert!", messageDesc: "Title must be at least 15 characters")
         } else if bodyTxt.text?.count ?? 0 < 30 {
             showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
@@ -33,5 +33,9 @@ class QuestionVC: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        <#code#>
+//    }
     
 }
