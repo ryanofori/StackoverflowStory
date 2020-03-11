@@ -12,6 +12,7 @@ class QuestionListVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchQuestions: UISearchBar!
+    var urlPath = URLBuilder()
     var itemsArray = [Items]()
     var filteredArray = [Items]()
     var favSwitcher = false
@@ -28,9 +29,9 @@ class QuestionListVC: UIViewController {
         searchQuestions.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        print(URLBuilder.newAccessToken)
+        print(urlPath.newAccessToken)
         print(itemsArray.count)
-            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) else { return }
+            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) else { return }
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in

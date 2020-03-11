@@ -9,9 +9,9 @@
 import UIKit
 
 protocol QNACellDelegete {
-    func didTapUpVote(tag: Int)
-    func didTapDownVote()
-    func didTapFav()
+    func didTapUpVote(section: Int, row: Int)
+    func didTapDownVote(section: Int, row: Int)
+    func didTapFav(section: Int, row: Int)
 }
 
 class QNATableViewCell: UITableViewCell {
@@ -24,26 +24,23 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
     
-    var cellItems = [Items]()
+    
     var cellDelegate: QNACellDelegete?
-    func passItems(item: [Items]) {
-        cellItems = item
-    }
     
-    @IBOutlet weak var upVote: UIButton!
+    @IBOutlet weak var upVote: SubButton!
     @IBAction func upVote(_ sender: Any) {
-        cellDelegate?.didTapUpVote(tag: (sender as AnyObject).tag)
+        cellDelegate?.didTapUpVote(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
     
-    @IBOutlet weak var downVote: UIButton!
+    @IBOutlet weak var downVote: SubButton!
     @IBAction func downVote(_ sender: Any) {
-        cellDelegate?.didTapDownVote()
+        cellDelegate?.didTapDownVote(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
     
-    @IBOutlet weak var favBtn: UIButton!
+    @IBOutlet weak var favBtn: SubButton!
     
     @IBAction func favBtn(_ sender: Any) {
-        cellDelegate?.didTapFav()
+        cellDelegate?.didTapFav(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
     override func awakeFromNib() {
         super.awakeFromNib()

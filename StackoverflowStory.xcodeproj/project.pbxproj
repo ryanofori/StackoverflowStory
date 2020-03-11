@@ -640,6 +640,7 @@
 				CODE_SIGN_ENTITLEMENTS = StackoverflowStory/StackoverflowStory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				DEVELOPMENT_TEAM = B76MH49FK6;
 				INFOPLIST_FILE = StackoverflowStory/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -660,6 +661,7 @@
 				CODE_SIGN_ENTITLEMENTS = StackoverflowStory/StackoverflowStory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				DEVELOPMENT_TEAM = B76MH49FK6;
 				INFOPLIST_FILE = StackoverflowStory/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

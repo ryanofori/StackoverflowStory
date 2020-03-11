@@ -17,8 +17,6 @@ class QuestionNAnswerVC: UIViewController {
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
     var isFavortied = false
-    var selectedRow = 0
-    var selectedSection = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +24,6 @@ class QuestionNAnswerVC: UIViewController {
     }
     
     @IBAction func postAnswerBtn(_ sender: Any) {
-        //postFunc()
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
             showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
@@ -49,35 +46,6 @@ class QuestionNAnswerVC: UIViewController {
             }
         }
     }
-    //for favs
-    func postFunc() {
-        let param: String = "key=tUo34InxiBQXN3La2wI7Bw((" + "&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))" + "&site=stackoverflow.com"
-        let data = param.data(using: .utf8)
-        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions/25827033/favorite/") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        request.httpBody = data
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
-            if let response = response {
-                print(response)
-            }
-            if let error = error {
-                print(error)
-            }
-            if let data = data {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    print(json)
-                } catch {
-                    print(error)
-                }
-            }
-            //                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
-            //print(response)
-        })
-        task.resume()
-    }
     
 }
 extension QuestionNAnswerVC: UITableViewDelegate {
@@ -99,7 +67,14 @@ extension QuestionNAnswerVC: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "aCell") as? QNATableViewCell
         cell?.profileName.textColor = .systemBlue
         cell?.cellDelegate = self
-        cell?.upVote.tag = indexPath.row
+        
+        cell?.upVote.row = indexPath.row
+        cell?.upVote.section = indexPath.section
+        cell?.downVote.row = indexPath.row
+        cell?.downVote.section = indexPath.section
+        cell?.favBtn.row = indexPath.row
+        cell?.favBtn.section = indexPath.section
+        
         //cell?.passItems(item: [questionNAnswerArray[indexPath.row]])
         if indexPath.section == 0 {
             cell?.title.text = questionNAnswerArray[mainIndex].title?.html2String
@@ -154,38 +129,49 @@ extension QuestionNAnswerVC: UITableViewDataSource {
     
 }
 extension QuestionNAnswerVC: QNACellDelegete {
-    func didTapUpVote(tag: Int) {
-        print("this is my tag")
-        print(tag)
-    }
-    
-    //pass the section and row here
-//    func didTapUpVote() {
-//        //question
-//        if selectedSection == 0 && selectedRow == 0 {
-//            print(questionNAnswerArray[mainIndex].owner?.display_name)
-//            print("section:")
-//
-//        } else {
-//            print("row:")
-//            print(selectedRow)
-//            print(questionNAnswerArray[mainIndex].answers?[selectedRow].owner?.display_name)
-//        }
-//        //answer
-//
-//    }
-    
-    func didTapDownVote() {
-        //question
-        if selectedSection == 0 && selectedRow == 0 {
-            print("section- ")
-            print("row- ")
+    func didTapUpVote(section: Int, row: Int) {
+        print("section: \(section) and row: \(row)")
+        if section == 0 {
+            print(questionNAnswerArray[mainIndex].question_id)
+            print("section:")
+            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
+            //upVotes a question
+            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+
+        } else {
+            print("row:")
+            print(row)
+            print(questionNAnswerArray[mainIndex].answers?[row].owner?.display_name)
+            // MARK: Fix this!!!
+            var answerIdString = ""
+            postFunc(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
         }
         //answer
     }
     
-    func didTapFav() {
-        print("mainIndex")
+    func didTapDownVote(section: Int, row: Int) {
+        print("section- \(section) and row- \(row)")
+        if section == 0 {
+            let questionId = String(questionNAnswerArray[mainIndex].question_id)
+            //Downvote a question
+            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+
+        } else {
+            print(row)
+            print(questionNAnswerArray[mainIndex].answers?[row].body)
+            print(questionNAnswerArray[mainIndex].answers?[row].answer_id)
+            // MARK: Fix this too!!!
+            postFunc(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+        }
+    }
+    
+    func didTapFav(section: Int, row: Int) {
+        print("section* \(section) and row* \(row)")
+        if section == 0 {
+            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
+            //fav a question
+            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+        }
     }
     
 }

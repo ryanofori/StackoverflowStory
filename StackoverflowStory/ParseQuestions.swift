@@ -18,7 +18,7 @@ struct Items: Codable {
     var is_accepted: Bool?
     var answer_count: Int
     var score: Int?
-    var question_id: Int?
+    var question_id: Int
     var link: String?
     var title: String?
     var body: String?
@@ -28,7 +28,7 @@ struct Answers: Codable {
     var owner: Owner?
     var is_accepted: Bool?
     var score: Int?
-    var answer_id: Int?
+    var answer_id: Int
     var title: String?
     var body: String?
 }

@@ -10,7 +10,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
     var userId = 0
-    
+    var urlPath = URLBuilder()
     @IBAction func webBtn(_ sender: Any) {
         performSegue(withIdentifier: "web", sender: nil)
     }
@@ -20,8 +20,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //check if access token works
-        getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (info) in
+        getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseUser.self, from: info)
@@ -73,7 +72,7 @@ class LoginViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let webVC = segue.destination as? WebViewController
-        webVC?.passedUrl = URLBuilder.oauth2PostgetAcceesTokenURL
+        webVC?.passedUrl = urlPath.oauth2PostgetAcceesTokenURL
         let favVC = segue.destination as? FavoriteVC
         favVC?.passedUserId = userId
         

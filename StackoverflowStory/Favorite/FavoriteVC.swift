@@ -13,7 +13,7 @@ class FavoriteVC: UIViewController {
     @IBOutlet weak var favTableView: UITableView!
     //first below?
     var favArray = [Items]()
-    //var retryUserId = 0
+    var urlPath = URLBuilder()
     var passedUserId = 0
     var favURL = ""
     
@@ -23,7 +23,7 @@ class FavoriteVC: UIViewController {
         if passedUserId == 0 {
             //failed to get iDNumber
             //get iDNumber again
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (info) in
+            getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseUser.self, from: info)
@@ -36,7 +36,7 @@ class FavoriteVC: UIViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 print("thos may work")
                 print(self.passedUserId)
-                self.getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (data) in
+                self.getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
                     let jsonDecoder = JSONDecoder()
                     do {
                         let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
@@ -58,7 +58,7 @@ class FavoriteVC: UIViewController {
             //got the person's iDNumber
             //Now show there favs using
             //currently will never be called unless you can get the userID
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (data) in
+            getStringToJson(urlString: "https://api.stackexchange.com/2.2/users/" + String(passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (data) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
@@ -110,6 +110,7 @@ extension FavoriteVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             // handle delete (by removing the data from your array and updating the tableview)
+            
         }
     }
 }
