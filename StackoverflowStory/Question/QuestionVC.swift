@@ -24,7 +24,7 @@ class QuestionVC: UIViewController {
         } else if bodyTxt.text?.count ?? 0 < 30 {
             showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
         } else {
-            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + sendUrl)
+            postData(urlString: "https://api.stackexchange.com/2.2/questions/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + sendUrl)
         }
         
     }

@@ -9,18 +9,9 @@
 import UIKit
 
 extension UIViewController {
-    func getStringToJson(urlString: String, completion: @escaping(Data) -> Void) {
-        guard let url = URL(string: urlString) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request) {data, response, error in
-            guard let data = data else { return }
-            completion(data)
-        }
-        task.resume()
-    }
     
-    func postFunc(urlString: String, param: String) {
+    
+    func postData(urlString: String, param: String) {
         let param: String = param
         let data = param.data(using: .utf8)
         guard let url = URL(string: urlString) else { return }

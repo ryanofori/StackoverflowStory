@@ -28,7 +28,7 @@ class QuestionNAnswerVC: UIViewController {
         if answerTxt.text?.count ?? 0 < 30 {
             showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
         } else {
-            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
+            postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
         }
     }
     
@@ -136,7 +136,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
             print("section:")
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //upVotes a question
-            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
 
         } else {
             print("row:")
@@ -144,7 +144,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
             print(questionNAnswerArray[mainIndex].answers?[row].owner?.display_name)
             // MARK: Fix this!!!
             var answerIdString = ""
-            postFunc(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
         }
         //answer
     }
@@ -154,14 +154,14 @@ extension QuestionNAnswerVC: QNACellDelegete {
         if section == 0 {
             let questionId = String(questionNAnswerArray[mainIndex].question_id)
             //Downvote a question
-            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
 
         } else {
             print(row)
             print(questionNAnswerArray[mainIndex].answers?[row].body)
             print(questionNAnswerArray[mainIndex].answers?[row].answer_id)
             // MARK: Fix this too!!!
-            postFunc(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            postData(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
         }
     }
     
@@ -170,7 +170,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
         if section == 0 {
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //fav a question
-            postFunc(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
         }
     }
     

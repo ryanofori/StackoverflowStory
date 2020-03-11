@@ -93,7 +93,7 @@ extension QuestionListVC: UITableViewDelegate {
                 
             }
             
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/questions?page=" + pageString + "&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow") { (nextSet) in
+            NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/questions?page=" + pageString + "&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow") { (nextSet) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: nextSet)
@@ -137,7 +137,7 @@ extension QuestionListVC: UISearchBarDelegate {
         //        }
         if searchText.isEmpty == false {
             let trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + (trimString ?? "") + "&filter=!b1MMEUblCwYno1&site=stackoverflow") { (searchTerm) in
+            NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + (trimString ?? "") + "&filter=!b1MMEUblCwYno1&site=stackoverflow") { (searchTerm) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: searchTerm)
