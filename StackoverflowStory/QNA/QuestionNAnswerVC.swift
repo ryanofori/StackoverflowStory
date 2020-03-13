@@ -17,6 +17,7 @@ class QuestionNAnswerVC: UIViewController {
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
     var isFavortied = false
+    let alert = Alert()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,18 +27,22 @@ class QuestionNAnswerVC: UIViewController {
     @IBAction func postAnswerBtn(_ sender: Any) {
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
-            showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
+            alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: QuestionNAnswerVC())
         } else {
-            postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText, viewController: QuestionNAnswerVC())
         }
     }
     
     func sectionManager() {
+        print("mainIndex")
+        print(mainIndex)
         for row in 0...1 {
             sectionAmountArray.append([String]())
             if row == 0 {
                 sectionAmountArray[row].append("0")
             } else {
+                print("I don't know")
+                print(questionNAnswerArray[mainIndex].answers?.count)
                 if questionNAnswerArray[mainIndex].answers?.count != nil {
                     for index in 0...questionNAnswerArray[mainIndex].answers!.count - 1 {
                         sectionAmountArray[row].append(String(index))
@@ -97,6 +102,23 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                 }
             }
             cell?.favBtn.isHidden = false
+            //if true yellow else false gray
+            if questionNAnswerArray[mainIndex].upvoted == true {
+                cell?.upVote.tintColor = .yellow
+            } else {
+                cell?.upVote.tintColor = .gray
+            }
+            if questionNAnswerArray[mainIndex].downvoted == true {
+                cell?.downVote.tintColor = .yellow
+            } else {
+                cell?.downVote.tintColor = .gray
+            }
+            if questionNAnswerArray[mainIndex].favorited == true {
+                cell?.favBtn.tintColor = .yellow
+            } else {
+                cell?.favBtn.tintColor = .gray
+            }
+            
         } else {
             let indexType = indexPath.row
             cell?.title.text = ""
@@ -136,7 +158,11 @@ extension QuestionNAnswerVC: QNACellDelegete {
             print("section:")
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //upVotes a question
-            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            if questionNAnswerArray[mainIndex].upvoted == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            }
 
         } else {
             print("row:")
@@ -144,7 +170,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
             print(questionNAnswerArray[mainIndex].answers?[row].owner?.display_name)
             // MARK: Fix this!!!
             var answerIdString = ""
-            postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
         }
         //answer
     }
@@ -154,14 +180,17 @@ extension QuestionNAnswerVC: QNACellDelegete {
         if section == 0 {
             let questionId = String(questionNAnswerArray[mainIndex].question_id)
             //Downvote a question
-            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
-
+            if questionNAnswerArray[mainIndex].downvoted == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            }
         } else {
             print(row)
             print(questionNAnswerArray[mainIndex].answers?[row].body)
             print(questionNAnswerArray[mainIndex].answers?[row].answer_id)
             // MARK: Fix this too!!!
-            postData(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            NetworkManager.shared.postData(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
         }
     }
     
@@ -170,7 +199,14 @@ extension QuestionNAnswerVC: QNACellDelegete {
         if section == 0 {
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //fav a question
-            postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com")
+            if questionNAnswerArray[mainIndex].favorited == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=TmNhfBzOSnJmxWxXmIUP1Q))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                print("I have unfavorited")
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=TmNhfBzOSnJmxWxXmIUP1Q))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                print("I have favorited")
+            }
+            
         }
     }
     

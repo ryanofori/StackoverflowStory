@@ -10,50 +10,6 @@ import UIKit
 
 extension UIViewController {
     
-    
-    func postData(urlString: String, param: String) {
-        let param: String = param
-        let data = param.data(using: .utf8)
-        guard let url = URL(string: urlString) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        request.httpBody = data
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
-            if let response = response {
-                print(response)
-            }
-            if let error = error {
-                print(error)
-            }
-            if let data = data {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                    //print(json)
-                    if let errorMessage = json?["error_message"] as? String? {
-                        let errorTitle = json?["error_message"] as? String
-                        self.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "")
-                    }
-                } catch {
-                    print(error)
-                }
-            }
-            //                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
-            //print(response)
-        })
-        task.resume()
-    }
-    
-    func showAlert(mesageTitle: String, messageDesc: String) {
-        let alertController = UIAlertController(title: mesageTitle,
-                                                message: messageDesc,
-                                                preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss",
-                                                style: .default))
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     //result
     //be a singleton
 //    func loadData(urlString: String, completed: @escaping (Data) -> Void) {

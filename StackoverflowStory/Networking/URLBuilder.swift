@@ -19,7 +19,7 @@ class URLBuilder {
      let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
     let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
      var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")
-     let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access&redirect_uri=https://stackexchange.com/oauth/login_success"
+     let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access,private_info&redirect_uri=https://stackexchange.com/oauth/login_success"
     
     func authUrlFull() -> String {
         return authBaseUrl + clientId + scope + redirectUri + key + newAccessToken

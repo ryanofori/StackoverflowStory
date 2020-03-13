@@ -24,7 +24,6 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
     
-    
     var cellDelegate: QNACellDelegete?
     
     @IBOutlet weak var upVote: SubButton!

@@ -24,6 +24,7 @@ class FavoriteVC: UIViewController {
             //failed to get iDNumber
             //get iDNumber again
             NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
+                
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseUser.self, from: info)
@@ -37,6 +38,10 @@ class FavoriteVC: UIViewController {
                 print("thos may work")
                 print(self.passedUserId)
                 NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
+                    if let jsonString = String(data: data, encoding: .utf8){
+                        //Allows you to see the json in console
+                        print(jsonString)
+                    }
                     let jsonDecoder = JSONDecoder()
                     do {
                         let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
