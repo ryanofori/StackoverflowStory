@@ -21,15 +21,23 @@ class QuestionNAnswerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("happy index")
+        print(questionNAnswerArray[mainIndex].body)
+        print(mainIndex)
         sectionManager()
     }
     
     @IBAction func postAnswerBtn(_ sender: Any) {
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
-            alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: QuestionNAnswerVC())
+            alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText, viewController: QuestionNAnswerVC())
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText){ (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                }
+            }
         }
     }
     
@@ -41,8 +49,6 @@ class QuestionNAnswerVC: UIViewController {
             if row == 0 {
                 sectionAmountArray[row].append("0")
             } else {
-                print("I don't know")
-                print(questionNAnswerArray[mainIndex].answers?.count)
                 if questionNAnswerArray[mainIndex].answers?.count != nil {
                     for index in 0...questionNAnswerArray[mainIndex].answers!.count - 1 {
                         sectionAmountArray[row].append(String(index))
@@ -64,7 +70,6 @@ extension QuestionNAnswerVC: UITableViewDelegate {
 extension QuestionNAnswerVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return questionNAnswerArray[mainIndex].answer_count + 1
         return sectionAmountArray[section].count
     }
     
@@ -72,15 +77,12 @@ extension QuestionNAnswerVC: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "aCell") as? QNATableViewCell
         cell?.profileName.textColor = .systemBlue
         cell?.cellDelegate = self
-        
         cell?.upVote.row = indexPath.row
         cell?.upVote.section = indexPath.section
         cell?.downVote.row = indexPath.row
         cell?.downVote.section = indexPath.section
         cell?.favBtn.row = indexPath.row
         cell?.favBtn.section = indexPath.section
-        
-        //cell?.passItems(item: [questionNAnswerArray[indexPath.row]])
         if indexPath.section == 0 {
             cell?.title.text = questionNAnswerArray[mainIndex].title?.html2String
             cell?.title.font = .boldSystemFont(ofSize: 17.0)
@@ -159,18 +161,29 @@ extension QuestionNAnswerVC: QNACellDelegete {
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //upVotes a question
             if questionNAnswerArray[mainIndex].upvoted == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    }
+                }
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    }
+                }
             }
 
         } else {
-            print("row:")
-            print(row)
-            print(questionNAnswerArray[mainIndex].answers?[row].owner?.display_name)
-            // MARK: Fix this!!!
-            var answerIdString = ""
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                }
+            }
         }
         //answer
     }
@@ -181,16 +194,29 @@ extension QuestionNAnswerVC: QNACellDelegete {
             let questionId = String(questionNAnswerArray[mainIndex].question_id)
             //Downvote a question
             if questionNAnswerArray[mainIndex].downvoted == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    }
+                }
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    }
+                }
             }
         } else {
-            print(row)
-            print(questionNAnswerArray[mainIndex].answers?[row].body)
-            print(questionNAnswerArray[mainIndex].answers?[row].answer_id)
-            // MARK: Fix this too!!!
-            NetworkManager.shared.postData(urlString: "", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+            let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
+            
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                }
+            }
         }
     }
     
@@ -200,11 +226,27 @@ extension QuestionNAnswerVC: QNACellDelegete {
             let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //fav a question
             if questionNAnswerArray[mainIndex].favorited == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=TmNhfBzOSnJmxWxXmIUP1Q))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        DispatchQueue.main.async {
+                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                        }
+
+                    }
+                }
                 print("I have unfavorited")
+                
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=TmNhfBzOSnJmxWxXmIUP1Q))&site=stackoverflow.com", viewController: QuestionNAnswerVC())
-                print("I have favorited")
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        DispatchQueue.main.async {
+                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                        }
+                        
+                    }
+                }
             }
             
         }

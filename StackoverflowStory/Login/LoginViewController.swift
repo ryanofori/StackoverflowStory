@@ -53,7 +53,7 @@ class LoginViewController: UIViewController {
                 } else {
                     self.performAuthOrFallback(true)
                 }
-                }
+                    }
             }
             
         } else {

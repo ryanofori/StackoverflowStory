@@ -23,7 +23,7 @@ class NetworkManager {
         task.resume()
     }
     
-    func postData(urlString: String, param: String, viewController: UIViewController) {
+    func postData(urlString: String, param: String, completion: @escaping([String: Any]) -> Void) {
 //        let alert = Alert()
         let param: String = param
         let data = param.data(using: .utf8)
@@ -33,9 +33,9 @@ class NetworkManager {
         request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.httpBody = data
         let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
-            if let response = response {
-                print(response)
-            }
+//            if let response = response {
+//                print(response)
+//            }
             if let error = error {
                 print(error)
             }
@@ -43,10 +43,11 @@ class NetworkManager {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     //print(json)
+                    completion(json ?? ["": (Any).self])
                     if let errorMessage = json?["error_message"] as? String? {
                         let errorTitle = json?["error_message"] as? String
 //                        alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: viewController)
-                        //Alert.showAlert(Alert)
+//                        Alert.showAlert(Alert)
                         
                     }
                 } catch {

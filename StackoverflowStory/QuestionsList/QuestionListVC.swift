@@ -20,15 +20,41 @@ class QuestionListVC: UIViewController {
     var fetchMore = false
     var searchString = ""
     
+    @IBOutlet weak var sortBtn: UIButton!
+    @IBAction func sortBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "Select sort type", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Activity", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = "Activity"
+        }))
+        alert.addAction(UIAlertAction(title: "Votes", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = "Votes"
+        }))
+        alert.addAction(UIAlertAction(title: "Creation", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = "Creation"
+        }))
+        alert.addAction(UIAlertAction(title: "Hot", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Week", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = action.title
+        }))
+        alert.addAction(UIAlertAction(title: "Month", style: .default, handler: { action in
+            self.sortBtn.titleLabel?.text = "Month"
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+        print(sortBtn.titleLabel?.text)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(CoreDataFetchOps.shared.getAccessToken()?.token)
+        sortBtn.titleLabel?.text = "Sort"
         navigationItem.setHidesBackButton(true, animated: true)
         let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.bordered, target: self, action: #selector(quest))
         self.navigationItem.leftBarButtonItem = newBackButton
         searchQuestions.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
         print(urlPath.newAccessToken)
         print(itemsArray.count)
         guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!FnhX5sXiIrG3hI*4CNkiuWygeb&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) else { return }

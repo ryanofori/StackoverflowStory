@@ -12,8 +12,8 @@ class URLBuilder {
     //authURL
     let authBaseUrl = "https://stackoverflow.com/oauth/dialog"
      let clientId = "?client_id=17028"
-     let scope = "&scope=write_access"
-    let privateInfo = ",private_info"
+     let scope = "&scope=write_access,private_info"
+    let and = "&"
      let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
      let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
      let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
@@ -24,5 +24,8 @@ class URLBuilder {
     func authUrlFull() -> String {
         return authBaseUrl + clientId + scope + redirectUri + key + newAccessToken
     }
+//    func oauth2PostgetAcceesTokenURL() -> String {
+//        return authBaseUrl + clientId + scope + redirectUri
+//    }
     
 }
