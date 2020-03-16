@@ -12,8 +12,11 @@ class QuestionListVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchQuestions: UISearchBar!
+    @IBOutlet weak var sortPicker: UIPickerView!
+    var urlPath = URLBuilder()
     var itemsArray = [Items]()
     var filteredArray = [Items]()
+    var sortArray = ["activity", "votes", "creation", "hot", "week", "month"]
     var favSwitcher = false
     var mainIndex = 0
     var fetchMore = false
@@ -21,27 +24,31 @@ class QuestionListVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(CoreDataFetchOps.shared.getAccessToken()?.token)
         navigationItem.setHidesBackButton(true, animated: true)
-        let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.bordered, target: self, action: #selector(fav))
+        let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.bordered, target: self, action: #selector(quest))
         self.navigationItem.leftBarButtonItem = newBackButton
         searchQuestions.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        print(URLBuilder.newAccessToken)
+        
+        print(urlPath.newAccessToken)
         print(itemsArray.count)
-            guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) else { return }
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
-                guard let data = data else { return }
-                self.parseJSON(data: data)
-            })
-            task.resume()
+        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions?page=1&order=desc&sort=activity&filter=!FnhX5sXiIrG3hI*4CNkiuWygeb&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
+            guard let data = data else { return }
+            self.parseJSON(data: data)
+        })
+        task.resume()
         
     }
     
     func parseJSON(data: Data) {
+//        if let jsonString = String(data: data, encoding: .utf8){
+//            //Allows you to see the json in console
+//            print(jsonString)
+//        }
         let jsonDecoder = JSONDecoder()
         do {
             let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
@@ -64,7 +71,7 @@ class QuestionListVC: UIViewController {
     }
     
     @objc
-    func fav() {
+    func quest() {
         performSegue(withIdentifier: "quest", sender: nil)
     }
     
@@ -92,7 +99,7 @@ extension QuestionListVC: UITableViewDelegate {
                 
             }
             
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/questions?page=" + pageString + "&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow") { (nextSet) in
+            NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/questions?page=" + pageString + "&order=desc&sort=activity&filter=!b1MMEUblCwYno1&sort=activity&site=stackoverflow") { (nextSet) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: nextSet)
@@ -136,7 +143,7 @@ extension QuestionListVC: UISearchBarDelegate {
         //        }
         if searchText.isEmpty == false {
             let trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            getStringToJson(urlString: "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + (trimString ?? "") + "&filter=!b1MMEUblCwYno1&site=stackoverflow") { (searchTerm) in
+            NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + (trimString ?? "") + "&filter=!b1MMEUblCwYno1&site=stackoverflow") { (searchTerm) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: searchTerm)
@@ -150,4 +157,38 @@ extension QuestionListVC: UISearchBarDelegate {
             }
         }
     }
+}
+extension QuestionListVC: UIPickerViewDelegate {
+    
+}
+extension QuestionListVC: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return sortArray.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return sortArray[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print(sortArray[row])
+        urlPath.sort = "&sort=" + sortArray[row]
+        NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/questions?order=desc" + urlPath.sort + "&filter=!FnhX5sXiIrG3hI*4CNkiuWygeb&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (data) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                //            let itemsGroup = root.items[0]
+                self.itemsArray = root.items
+                self.filteredArray = self.itemsArray
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }

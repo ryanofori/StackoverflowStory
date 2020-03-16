@@ -10,32 +10,25 @@ import UIKit
 
 class LoginViewController: UIViewController {
     var userId = 0
-    
-    @IBAction func webBtn(_ sender: Any) {
-        performSegue(withIdentifier: "web", sender: nil)
+    var urlPath = URLBuilder()
+    @IBAction func loginBtn(_ sender: Any) {
+        obtainedInfo()
     }
-    @IBAction func infoBtn(_ sender: Any) {
-        performSegue(withIdentifier: "info", sender: nil)
+    @IBAction func touchIdBtn(_ sender: Any) {
+        performAuthOrFallback()
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //check if access token works
-        getStringToJson(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + URLBuilder.newAccessToken + URLBuilder.key) { (info) in
+        NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseUser.self, from: info)
-                print(root.items[0].user_id)
                 self.userId = root.items[0].user_id ?? 0
-                print("something else is happening")
-                print(self.userId)
             } catch {
                 self.userId = 0
                 print(error.localizedDescription)
             }
         }
-        
-        performAuthOrFallback()
     }
     
     func performAuthOrFallback(_ fallback: Bool = false) {
@@ -47,13 +40,13 @@ class LoginViewController: UIViewController {
         }
         //&error is address of error
         if context.canEvaluatePolicy(policy, error: &error) {
-            context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in DispatchQueue.main.async {
-                if success {
-                    print("you are in")
-                    self.obtainedInfo()
-                } else {
-                    self.performAuthOrFallback(true)
-                }
+            context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in
+                DispatchQueue.main.async {
+                    if success {
+                        self.obtainedInfo()
+                    } else {
+                        self.performAuthOrFallback(true)
+                    }
                 }
             }
             
@@ -73,7 +66,7 @@ class LoginViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let webVC = segue.destination as? WebViewController
-        webVC?.passedUrl = URLBuilder.oauth2PostgetAcceesTokenURL
+        webVC?.passedUrl = urlPath.oauth2PostgetAcceesTokenURL
         let favVC = segue.destination as? FavoriteVC
         favVC?.passedUserId = userId
         

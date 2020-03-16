@@ -8,15 +8,24 @@
 
 import UIKit
 
-struct URLBuilder {
-    static let authBaseUrl = "https://stackoverflow.com/oauth/dialog"
-    static let clientId = "?client_id=17028"
-    static let scope = "&scope=write_access"
-    static let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
-    static let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
-    static let authUrlFull = URLBuilder.authBaseUrl + URLBuilder.clientId + URLBuilder.scope + URLBuilder.redirectUri + URLBuilder.key + URLBuilder.newAccessToken
-    static let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
-        static let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
-    static var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")
-    static let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access&redirect_uri=https://stackexchange.com/oauth/login_success"
+class URLBuilder {
+    let authBaseUrl = "https://stackoverflow.com/oauth/dialog"
+     let clientId = "?client_id=17028"
+     let scope = "&scope=write_access,private_info"
+    let and = "&"
+     let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
+     let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
+//     let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
+    var sort = "&sort=activity"
+    let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
+     var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")
+     let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access,private_info&redirect_uri=https://stackexchange.com/oauth/login_success"
+    
+    func authUrlFull() -> String {
+        return authBaseUrl + clientId + scope + redirectUri + key + newAccessToken
+    }
+//    func oauth2PostgetAcceesTokenURL() -> String {
+//        return authBaseUrl + clientId + scope + redirectUri
+//    }
+    
 }

@@ -18,7 +18,6 @@ class WebViewController: UIViewController {
         super.viewDidLoad()
         //this should be passed from previous controller via segue
         print(passedUrl)
-        //let urlString = URLBuilder.oauth2PostgetAcceesTokenURL
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         webView.load(request)
@@ -45,24 +44,16 @@ extension WebViewController: WKNavigationDelegate {
                 let tokenExtra = seperateEqual[1]
                 let seperateAnd = tokenExtra.components(separatedBy: "&")
                 if !seperateAnd[0].isEmpty {
-                    //store below in core data or keychain
-                    //URLBuilder.newAccessToken = seperateAnd[0]
-                    
                     let coreToken = AccessModel()
-                    //coreToken.token = seperateAnd[0]
-                    
                     let totalTokens = CoreDataFetchOps.shared.getAllToken()
                     
                     if totalTokens.count == 1 {
-                        // MARK: update token here
                         CoreDataUpdateOps.shared.updateToken(accessToken: seperateAnd[0])
                     } else {
                         CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
                     }
-                    print("in this area")
                     performSegue(withIdentifier: "qList", sender: nil)
                 }
-                //https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow&access_token=z1vaGikM80AAqybQ5(QsNA))&key=tUo34InxiBQXN3La2wI7Bw((
             }
         }
         print("Finished navigating to url \(String(describing: webView.url))")

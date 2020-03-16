@@ -17,23 +17,32 @@ class QuestionNAnswerVC: UIViewController {
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
     var isFavortied = false
+    let alert = Alert()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sectionManager()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func postAnswerBtn(_ sender: Any) {
-        //postFunc()
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
-            showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters")
+            alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
+        } else {
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText) { (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have sent answer", viewController: self)
+                }
+            }
         }
-        postFunc(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText)
     }
     
     func sectionManager() {
+        print("mainIndex")
+        print(mainIndex)
         for row in 0...1 {
             sectionAmountArray.append([String]())
             if row == 0 {
@@ -47,35 +56,6 @@ class QuestionNAnswerVC: UIViewController {
             }
         }
     }
-    //for favs
-    func postFunc() {
-        let param: String = "key=tUo34InxiBQXN3La2wI7Bw((" + "&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))" + "&site=stackoverflow.com"
-        let data = param.data(using: .utf8)
-        guard let url = URL(string: "https://api.stackexchange.com/2.2/questions/25827033/favorite/") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        request.httpBody = data
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
-            if let response = response {
-                print(response)
-            }
-            if let error = error {
-                print(error)
-            }
-            if let data = data {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    print(json)
-                } catch {
-                    print(error)
-                }
-            }
-            //                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
-            //print(response)
-        })
-        task.resume()
-    }
     
 }
 extension QuestionNAnswerVC: UITableViewDelegate {
@@ -84,16 +64,24 @@ extension QuestionNAnswerVC: UITableViewDelegate {
         let header = view as? UITableViewHeaderFooterView
         header?.textLabel?.textColor = .secondaryLabel
     }
+    
 }
 extension QuestionNAnswerVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return questionNAnswerArray[mainIndex].answer_count + 1
         return sectionAmountArray[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "aCell") as? QNATableViewCell
         cell?.profileName.textColor = .systemBlue
+        cell?.cellDelegate = self
+        cell?.upVote.row = indexPath.row
+        cell?.upVote.section = indexPath.section
+        cell?.downVote.row = indexPath.row
+        cell?.downVote.section = indexPath.section
+        cell?.favBtn.row = indexPath.row
+        cell?.favBtn.section = indexPath.section
         if indexPath.section == 0 {
             cell?.title.text = questionNAnswerArray[mainIndex].title?.html2String
             cell?.title.font = .boldSystemFont(ofSize: 17.0)
@@ -115,7 +103,22 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                 }
             }
             cell?.favBtn.isHidden = false
-            cell?.favBtn.addTarget(self, action: #selector(switcher), for: .touchUpInside)
+            //if true yellow else false gray
+            if questionNAnswerArray[mainIndex].upvoted == true {
+                cell?.upVote.tintColor = .yellow
+            } else {
+                cell?.upVote.tintColor = .gray
+            }
+            if questionNAnswerArray[mainIndex].downvoted == true {
+                cell?.downVote.tintColor = .yellow
+            } else {
+                cell?.downVote.tintColor = .gray
+            }
+            if questionNAnswerArray[mainIndex].favorited == true {
+                cell?.favBtn.tintColor = .yellow
+            } else {
+                cell?.favBtn.tintColor = .gray
+            }
             
         } else {
             let indexType = indexPath.row
@@ -147,19 +150,121 @@ extension QuestionNAnswerVC: UITableViewDataSource {
         return sectionAmountArray.count
     }
     
-    @objc
-    func switcher(sender: UIButton) {
-        
-//        print(questionNAnswerArray[indexPath.row])
-//        if isFavortied == false {
-//            isFavortied = true
-//        } else {
-//            isFavortied = false
-//        }
-        // MARK: Switch color fill
-        // MARK: Add core data after here
-        //        let cell = self.tableView.cellForRow(at: indexPath) as! UITableViewCell
-        //        print(cell.itemLabel.text)//print or get item
+}
+extension QuestionNAnswerVC: QNACellDelegete {
+    func didTapUpVote(section: Int, row: Int) {
+        print("section: \(section) and row: \(row)")
+        if section == 0 {
+            print(questionNAnswerArray[mainIndex].question_id)
+            print("section:")
+            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
+            //upVotes a question
+            if questionNAnswerArray[mainIndex].upvoted == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-upvoted a question", viewController: self)
+                    }
+                }
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted a question", viewController: self)
+                    }
+                }
+            }
+
+        } else {
+            let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted an answer", viewController: self)
+                }
+            }
+        }
+        //answer
+    }
+    
+    func didTapDownVote(section: Int, row: Int) {
+        print("section- \(section) and row- \(row)")
+        if section == 0 {
+            let questionId = String(questionNAnswerArray[mainIndex].question_id)
+            //Downvote a question
+            if questionNAnswerArray[mainIndex].downvoted == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-downvoted a question", viewController: self)
+                    }
+                }
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted a question", viewController: self)
+                    }
+                }
+            }
+        } else {
+            let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
+            
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
+                if let errorMessage = json["error_message"] as? String? {
+                    let errorTitle = json["error_message"] as? String
+                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted an answer", viewController: self)
+                }
+            }
+        }
+    }
+    
+    func didTapFav(section: Int, row: Int) {
+        print("section* \(section) and row* \(row)")
+        if section == 0 {
+            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
+            //fav a question
+            if questionNAnswerArray[mainIndex].favorited == true {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        DispatchQueue.main.async {
+                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                        }
+
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have unfavorited a question", viewController: self)
+                    }
+                }
+                print("I have unfavorited")
+                
+            } else {
+                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
+                    if let errorMessage = json["error_message"] as? String? {
+                        let errorTitle = json["error_message"] as? String
+                        DispatchQueue.main.async {
+                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                        }
+                        
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have favorited a question", viewController: self)
+                    }
+                }
+            }
+            
+        }
     }
     
 }
