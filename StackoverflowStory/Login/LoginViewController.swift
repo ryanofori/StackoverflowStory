@@ -9,18 +9,26 @@ import LocalAuthentication
 import UIKit
 
 class LoginViewController: UIViewController {
-    
-    @IBAction func webBtn(_ sender: Any) {
-        performSegue(withIdentifier: "web", sender: nil)
+    var userId = 0
+    var urlPath = URLBuilder()
+    @IBAction func loginBtn(_ sender: Any) {
+        obtainedInfo()
     }
-    
-    @IBAction func infoBtn(_ sender: Any) {
-        performSegue(withIdentifier: "info", sender: nil)
+    @IBAction func touchIdBtn(_ sender: Any) {
+        performAuthOrFallback()
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //performAuthOrFallback()
+        NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseUser.self, from: info)
+                self.userId = root.items[0].user_id ?? 0
+            } catch {
+                self.userId = 0
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func performAuthOrFallback(_ fallback: Bool = false) {
@@ -32,23 +40,35 @@ class LoginViewController: UIViewController {
         }
         //&error is address of error
         if context.canEvaluatePolicy(policy, error: &error) {
-            context.evaluatePolicy(policy, localizedReason: "Need bio auth")
-            { success, autError in DispatchQueue.main.async {
-                if success {
-                    print("you are in")
-                    self.performSegue(withIdentifier: "Info", sender: nil)
-                    //self.navigateToSecondVC()
-                } else {
-                    self.performAuthOrFallback(true)
+            context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in
+                DispatchQueue.main.async {
+                    if success {
+                        self.obtainedInfo()
+                    } else {
+                        self.performAuthOrFallback(true)
+                    }
                 }
             }
-            }
+            
         } else {
             self.performAuthOrFallback(true)
         }
     }
+    
+    func obtainedInfo() {
+        print(userId)
+        if userId == 0 {
+            performSegue(withIdentifier: "web", sender: nil)
+        } else {
+            performSegue(withIdentifier: "info", sender: nil)
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let webVC = segue.destination as? WebViewController
-        webVC?.passedUrl = URLBuilder.oauth2PostgetAcceesTokenURL
+        webVC?.passedUrl = urlPath.oauth2PostgetAcceesTokenURL
+        let favVC = segue.destination as? FavoriteVC
+        favVC?.passedUserId = userId
+        
     }
 }

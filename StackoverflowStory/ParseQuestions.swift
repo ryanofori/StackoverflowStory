@@ -12,20 +12,28 @@ struct ParseQuestions: Codable {
     var items: [Items]
 }
 struct Items: Codable {
+    var favorited: Bool?
+    var downvoted: Bool?
+    var upvoted: Bool?
     var tags: [String]?
     var answers: [Answers]?
     var owner: Owner?
     var is_accepted: Bool?
     var answer_count: Int
     var score: Int?
-    var question_id: Int?
+    var question_id: Int
+    var link: String?
     var title: String?
     var body: String?
+    var user_id: Int?
 }
 struct Answers: Codable {
+    var downvoted: Bool?
+    var upvoted: Bool?
     var owner: Owner?
     var is_accepted: Bool?
     var score: Int?
+    var answer_id: Int
     var title: String?
     var body: String?
 }

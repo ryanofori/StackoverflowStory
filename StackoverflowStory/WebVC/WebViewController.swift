@@ -18,7 +18,6 @@ class WebViewController: UIViewController {
         super.viewDidLoad()
         //this should be passed from previous controller via segue
         print(passedUrl)
-        //let urlString = URLBuilder.oauth2PostgetAcceesTokenURL
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         webView.load(request)
@@ -27,16 +26,6 @@ class WebViewController: UIViewController {
         webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     func navigateToQuestions() {
         performSegue(withIdentifier: "qList", sender: nil)
     }
@@ -55,11 +44,16 @@ extension WebViewController: WKNavigationDelegate {
                 let tokenExtra = seperateEqual[1]
                 let seperateAnd = tokenExtra.components(separatedBy: "&")
                 if !seperateAnd[0].isEmpty {
-                    URLBuilder.newAccessToken = seperateAnd[0]
-                    print("in this area")
+                    let coreToken = AccessModel()
+                    let totalTokens = CoreDataFetchOps.shared.getAllToken()
+                    
+                    if totalTokens.count == 1 {
+                        CoreDataUpdateOps.shared.updateToken(accessToken: seperateAnd[0])
+                    } else {
+                        CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
+                    }
                     performSegue(withIdentifier: "qList", sender: nil)
                 }
-                //https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow&access_token=z1vaGikM80AAqybQ5(QsNA))&key=tUo34InxiBQXN3La2wI7Bw((
             }
         }
         print("Finished navigating to url \(String(describing: webView.url))")

@@ -22,7 +22,6 @@
 		7D5502DC2410C0EE003EFD5D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502DB2410C0EE003EFD5D /* CoreDataManager.swift */; };
 		7D5502E02410CA36003EFD5D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502DF2410CA36003EFD5D /* WebViewController.swift */; };
 		7D5502E22410CBE3003EFD5D /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E12410CBE3003EFD5D /* URLBuilder.swift */; };
-		7D5502E42410CC3D003EFD5D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E32410CC3D003EFD5D /* Token.swift */; };
 		7D5502E8241101C1003EFD5D /* QuestionListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E7241101C1003EFD5D /* QuestionListVC.swift */; };
 		7D5502EA241101ED003EFD5D /* QuestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502E9241101ED003EFD5D /* QuestionTableViewCell.swift */; };
 		7D5502ED24110679003EFD5D /* ParseQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502EC24110679003EFD5D /* ParseQuestions.swift */; };
@@ -31,8 +30,17 @@
 		7D5502F524126D47003EFD5D /* FavoriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502F424126D47003EFD5D /* FavoriteVC.swift */; };
 		7D5502F7241273AD003EFD5D /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502F6241273AD003EFD5D /* FavoriteTableViewCell.swift */; };
 		7D5502F924127471003EFD5D /* QuestionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502F824127471003EFD5D /* QuestionVC.swift */; };
-		7D5502FB24128125003EFD5D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502FA24128125003EFD5D /* ViewController.swift */; };
+		7D5502FB24128125003EFD5D /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502FA24128125003EFD5D /* UIViewController.swift */; };
 		7D5502FE24128E73003EFD5D /* FavWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5502FD24128E73003EFD5D /* FavWebViewController.swift */; };
+		7D5503022412C2AB003EFD5D /* CoreDataSaveOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503012412C2AB003EFD5D /* CoreDataSaveOps.swift */; };
+		7D5503042412C325003EFD5D /* AccessModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503032412C325003EFD5D /* AccessModel.swift */; };
+		7D5503062412C46D003EFD5D /* CoreDataFetchOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503052412C46D003EFD5D /* CoreDataFetchOps.swift */; };
+		7D5503082412C5D6003EFD5D /* CoreDataDeleteOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503072412C5D6003EFD5D /* CoreDataDeleteOps.swift */; };
+		7D55030A2412C642003EFD5D /* CoreDataUpdateOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5503092412C642003EFD5D /* CoreDataUpdateOps.swift */; };
+		7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030C24142527003EFD5D /* NetworkManager.swift */; };
+		7D55030F2415D5BA003EFD5D /* ParseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030E2415D5B9003EFD5D /* ParseUser.swift */; };
+		7D550313241805FD003EFD5D /* SubButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D550312241805FD003EFD5D /* SubButton.swift */; };
+		7DBA762A24192AE0000BD168 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA762924192AE0000BD168 /* Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +83,6 @@
 		7D5502DB2410C0EE003EFD5D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		7D5502DF2410CA36003EFD5D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		7D5502E12410CBE3003EFD5D /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
-		7D5502E32410CC3D003EFD5D /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		7D5502E7241101C1003EFD5D /* QuestionListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionListVC.swift; sourceTree = "<group>"; };
 		7D5502E9241101ED003EFD5D /* QuestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionTableViewCell.swift; sourceTree = "<group>"; };
 		7D5502EC24110679003EFD5D /* ParseQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseQuestions.swift; sourceTree = "<group>"; };
@@ -84,8 +91,17 @@
 		7D5502F424126D47003EFD5D /* FavoriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteVC.swift; sourceTree = "<group>"; };
 		7D5502F6241273AD003EFD5D /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		7D5502F824127471003EFD5D /* QuestionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionVC.swift; sourceTree = "<group>"; };
-		7D5502FA24128125003EFD5D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7D5502FA24128125003EFD5D /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		7D5502FD24128E73003EFD5D /* FavWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavWebViewController.swift; sourceTree = "<group>"; };
+		7D5503012412C2AB003EFD5D /* CoreDataSaveOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSaveOps.swift; sourceTree = "<group>"; };
+		7D5503032412C325003EFD5D /* AccessModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessModel.swift; sourceTree = "<group>"; };
+		7D5503052412C46D003EFD5D /* CoreDataFetchOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFetchOps.swift; sourceTree = "<group>"; };
+		7D5503072412C5D6003EFD5D /* CoreDataDeleteOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataDeleteOps.swift; sourceTree = "<group>"; };
+		7D5503092412C642003EFD5D /* CoreDataUpdateOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataUpdateOps.swift; sourceTree = "<group>"; };
+		7D55030C24142527003EFD5D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		7D55030E2415D5B9003EFD5D /* ParseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseUser.swift; sourceTree = "<group>"; };
+		7D550312241805FD003EFD5D /* SubButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubButton.swift; sourceTree = "<group>"; };
+		7DBA762924192AE0000BD168 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,15 +163,16 @@
 				7D5502FC24128E50003EFD5D /* FavWeb */,
 				7D55028E240EEB7F003EFD5D /* StackoverflowStory.entitlements */,
 				7D55025B240EEB70003EFD5D /* AppDelegate.swift */,
+				7D55030B24142508003EFD5D /* Networking */,
 				7D55025D240EEB70003EFD5D /* SceneDelegate.swift */,
 				7D550261240EEB70003EFD5D /* Main.storyboard */,
 				7D550267240EEB75003EFD5D /* Assets.xcassets */,
 				7D550269240EEB75003EFD5D /* LaunchScreen.storyboard */,
 				7D55026C240EEB75003EFD5D /* Info.plist */,
-				7D550264240EEB70003EFD5D /* StackoverflowStory.xcdatamodeld */,
-				7D5502E12410CBE3003EFD5D /* URLBuilder.swift */,
-				7D5502E32410CC3D003EFD5D /* Token.swift */,
 				7D5502EC24110679003EFD5D /* ParseQuestions.swift */,
+				7D55030E2415D5B9003EFD5D /* ParseUser.swift */,
+				7DBA762924192AE0000BD168 /* Alert.swift */,
+				7D550312241805FD003EFD5D /* SubButton.swift */,
 			);
 			path = StackoverflowStory;
 			sourceTree = "<group>";
@@ -181,7 +198,13 @@
 		7D5502D22410BD1F003EFD5D /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7D5503012412C2AB003EFD5D /* CoreDataSaveOps.swift */,
+				7D5503052412C46D003EFD5D /* CoreDataFetchOps.swift */,
+				7D5503092412C642003EFD5D /* CoreDataUpdateOps.swift */,
+				7D5503072412C5D6003EFD5D /* CoreDataDeleteOps.swift */,
 				7D5502DB2410C0EE003EFD5D /* CoreDataManager.swift */,
+				7D5503032412C325003EFD5D /* AccessModel.swift */,
+				7D550264240EEB70003EFD5D /* StackoverflowStory.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -200,7 +223,7 @@
 				7D5502D52410BE12003EFD5D /* Data.swift */,
 				7D5502D72410BE4D003EFD5D /* String.swift */,
 				7D5502D92410BE7A003EFD5D /* UIColor.swift */,
-				7D5502FA24128125003EFD5D /* ViewController.swift */,
+				7D5502FA24128125003EFD5D /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -254,6 +277,15 @@
 				7D5502FD24128E73003EFD5D /* FavWebViewController.swift */,
 			);
 			path = FavWeb;
+			sourceTree = "<group>";
+		};
+		7D55030B24142508003EFD5D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				7D55030C24142527003EFD5D /* NetworkManager.swift */,
+				7D5502E12410CBE3003EFD5D /* URLBuilder.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,22 +440,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */,
 				7D5502D82410BE4D003EFD5D /* String.swift in Sources */,
 				7D5502ED24110679003EFD5D /* ParseQuestions.swift in Sources */,
+				7D5503042412C325003EFD5D /* AccessModel.swift in Sources */,
 				7D5502F524126D47003EFD5D /* FavoriteVC.swift in Sources */,
 				7D5502E02410CA36003EFD5D /* WebViewController.swift in Sources */,
 				7D5502DA2410BE7A003EFD5D /* UIColor.swift in Sources */,
 				7D5502F924127471003EFD5D /* QuestionVC.swift in Sources */,
+				7D550313241805FD003EFD5D /* SubButton.swift in Sources */,
 				7D5502F324116B3C003EFD5D /* QNATableViewCell.swift in Sources */,
+				7D5503062412C46D003EFD5D /* CoreDataFetchOps.swift in Sources */,
 				7D5502F124110913003EFD5D /* QuestionNAnswerVC.swift in Sources */,
+				7D5503022412C2AB003EFD5D /* CoreDataSaveOps.swift in Sources */,
 				7D550260240EEB70003EFD5D /* LoginViewController.swift in Sources */,
+				7D5503082412C5D6003EFD5D /* CoreDataDeleteOps.swift in Sources */,
 				7D5502FE24128E73003EFD5D /* FavWebViewController.swift in Sources */,
+				7D55030F2415D5BA003EFD5D /* ParseUser.swift in Sources */,
+				7D55030A2412C642003EFD5D /* CoreDataUpdateOps.swift in Sources */,
 				7D5502D62410BE12003EFD5D /* Data.swift in Sources */,
-				7D5502FB24128125003EFD5D /* ViewController.swift in Sources */,
+				7D5502FB24128125003EFD5D /* UIViewController.swift in Sources */,
 				7D5502E22410CBE3003EFD5D /* URLBuilder.swift in Sources */,
 				7D5502EA241101ED003EFD5D /* QuestionTableViewCell.swift in Sources */,
 				7D55025C240EEB70003EFD5D /* AppDelegate.swift in Sources */,
-				7D5502E42410CC3D003EFD5D /* Token.swift in Sources */,
+				7DBA762A24192AE0000BD168 /* Alert.swift in Sources */,
 				7D5502F7241273AD003EFD5D /* FavoriteTableViewCell.swift in Sources */,
 				7D5502E8241101C1003EFD5D /* QuestionListVC.swift in Sources */,
 				7D550266240EEB70003EFD5D /* StackoverflowStory.xcdatamodeld in Sources */,
@@ -604,6 +644,7 @@
 				CODE_SIGN_ENTITLEMENTS = StackoverflowStory/StackoverflowStory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				DEVELOPMENT_TEAM = B76MH49FK6;
 				INFOPLIST_FILE = StackoverflowStory/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -624,6 +665,7 @@
 				CODE_SIGN_ENTITLEMENTS = StackoverflowStory/StackoverflowStory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				DEVELOPMENT_TEAM = B76MH49FK6;
 				INFOPLIST_FILE = StackoverflowStory/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
