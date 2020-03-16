@@ -11,5 +11,4 @@ import UIKit
 class SubButton: UIButton {
     var row: Int?
     var section: Int?
-
 }

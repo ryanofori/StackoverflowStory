@@ -12,42 +12,18 @@ class QuestionListVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchQuestions: UISearchBar!
+    @IBOutlet weak var sortPicker: UIPickerView!
     var urlPath = URLBuilder()
     var itemsArray = [Items]()
     var filteredArray = [Items]()
+    var sortArray = ["activity", "votes", "creation", "hot", "week", "month"]
     var favSwitcher = false
     var mainIndex = 0
     var fetchMore = false
     var searchString = ""
     
-    @IBOutlet weak var sortBtn: UIButton!
-    @IBAction func sortBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "Select sort type", message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Activity", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = "Activity"
-        }))
-        alert.addAction(UIAlertAction(title: "Votes", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = "Votes"
-        }))
-        alert.addAction(UIAlertAction(title: "Creation", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = "Creation"
-        }))
-        alert.addAction(UIAlertAction(title: "Hot", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = action.title
-        }))
-        alert.addAction(UIAlertAction(title: "Week", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = action.title
-        }))
-        alert.addAction(UIAlertAction(title: "Month", style: .default, handler: { action in
-            self.sortBtn.titleLabel?.text = "Month"
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
-        print(sortBtn.titleLabel?.text)
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        sortBtn.titleLabel?.text = "Sort"
         navigationItem.setHidesBackButton(true, animated: true)
         let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.bordered, target: self, action: #selector(quest))
         self.navigationItem.leftBarButtonItem = newBackButton
@@ -181,4 +157,38 @@ extension QuestionListVC: UISearchBarDelegate {
             }
         }
     }
+}
+extension QuestionListVC: UIPickerViewDelegate {
+    
+}
+extension QuestionListVC: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return sortArray.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return sortArray[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print(sortArray[row])
+        urlPath.sort = "&sort=" + sortArray[row]
+        NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/questions?order=desc" + urlPath.sort + "&filter=!FnhX5sXiIrG3hI*4CNkiuWygeb&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (data) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                //            let itemsGroup = root.items[0]
+                self.itemsArray = root.items
+                self.filteredArray = self.itemsArray
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }

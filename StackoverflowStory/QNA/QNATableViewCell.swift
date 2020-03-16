@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objc
 protocol QNACellDelegete {
     func didTapUpVote(section: Int, row: Int)
     func didTapDownVote(section: Int, row: Int)
@@ -24,7 +25,7 @@ class QNATableViewCell: UITableViewCell {
     @IBOutlet weak var tagsLbl: UILabel!
     @IBOutlet weak var reputationLbl: UILabel!
     
-    var cellDelegate: QNACellDelegete?
+    weak var cellDelegate: QNACellDelegete?
     
     @IBOutlet weak var upVote: SubButton!
     @IBAction func upVote(_ sender: Any) {

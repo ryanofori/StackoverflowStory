@@ -38,10 +38,10 @@ class FavoriteVC: UIViewController {
                 print("thos may work")
                 print(self.passedUserId)
                 NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
-                    if let jsonString = String(data: data, encoding: .utf8){
-                        //Allows you to see the json in console
-                        print(jsonString)
-                    }
+//                    if let jsonString = String(data: data, encoding: .utf8){
+//                        //Allows you to see the json in console
+//                        print(jsonString)
+//                    }
                     let jsonDecoder = JSONDecoder()
                     do {
                         let root = try jsonDecoder.decode(ParseQuestions.self, from: data)

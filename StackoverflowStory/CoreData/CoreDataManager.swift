@@ -11,7 +11,9 @@ import UIKit
 class CoreDataManager: NSObject {
     static let shared = CoreDataManager()
     private let dataModelName = "StackoverflowStory"
+    
     private override init() {}
+    
     var mainContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }

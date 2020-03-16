@@ -52,7 +52,6 @@ extension WebViewController: WKNavigationDelegate {
                     } else {
                         CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
                     }
-                    print("in this area")
                     performSegue(withIdentifier: "qList", sender: nil)
                 }
             }

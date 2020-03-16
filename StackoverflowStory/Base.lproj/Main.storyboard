@@ -16,19 +16,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtm-DN-ea2">
-                                <rect key="frame" x="192" y="259" width="31" height="30"/>
+                                <rect key="frame" x="128" y="259" width="160" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Web"/>
+                                <state key="normal" title="Login to StackOverflow"/>
                                 <connections>
-                                    <action selector="webBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qq6-63-a5E"/>
+                                    <action selector="loginBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qq6-63-a5E"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11c-ty-nD2">
-                                <rect key="frame" x="192" y="409" width="30" height="30"/>
+                                <rect key="frame" x="154" y="409" width="107" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Info"/>
+                                <state key="normal" title="Biometric Login"/>
                                 <connections>
-                                    <action selector="infoBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n2m-qz-hod"/>
+                                    <action selector="touchIdBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n2m-qz-hod"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -54,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sLv-g1-c3g">
-                                <rect key="frame" x="0.0" y="190" width="414" height="672"/>
+                                <rect key="frame" x="0.0" y="368" width="414" height="494"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="qCell" id="qIQ-a0-Z1h" customClass="QuestionTableViewCell" customModule="StackoverflowStory" customModuleProvider="target">
@@ -92,26 +92,26 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nMU-zO-UWz">
-                                <rect key="frame" x="20" y="152" width="366" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CQ3-1d-hM1">
+                                <rect key="frame" x="0.0" y="144" width="414" height="216"/>
                                 <connections>
-                                    <action selector="sortBtn:" destination="EKo-kO-dXd" eventType="touchUpInside" id="NS9-da-sgs"/>
+                                    <outlet property="dataSource" destination="EKo-kO-dXd" id="fMQ-y0-6R0"/>
+                                    <outlet property="delegate" destination="EKo-kO-dXd" id="qAu-On-xMB"/>
                                 </connections>
-                            </button>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="nMU-zO-UWz" firstAttribute="leading" secondItem="GTS-68-Msq" secondAttribute="leading" constant="20" id="LsO-1X-cMz"/>
+                            <constraint firstItem="CQ3-1d-hM1" firstAttribute="trailing" secondItem="GTS-68-Msq" secondAttribute="trailing" id="AKU-MZ-MJF"/>
                             <constraint firstItem="sLv-g1-c3g" firstAttribute="bottom" secondItem="GTS-68-Msq" secondAttribute="bottom" id="MSq-72-Igd"/>
-                            <constraint firstItem="GTS-68-Msq" firstAttribute="trailing" secondItem="nMU-zO-UWz" secondAttribute="trailing" constant="28" id="NTE-km-w1N"/>
-                            <constraint firstItem="nMU-zO-UWz" firstAttribute="top" secondItem="gM6-t8-UwI" secondAttribute="bottom" constant="8" id="WeO-PT-D9x"/>
+                            <constraint firstItem="CQ3-1d-hM1" firstAttribute="top" secondItem="gM6-t8-UwI" secondAttribute="bottom" symbolic="YES" id="MoA-QP-1OS"/>
+                            <constraint firstItem="sLv-g1-c3g" firstAttribute="top" secondItem="CQ3-1d-hM1" secondAttribute="bottom" constant="8" id="Sib-ub-VxF"/>
                             <constraint firstItem="gM6-t8-UwI" firstAttribute="top" secondItem="GTS-68-Msq" secondAttribute="top" id="Z2i-LX-PCK"/>
                             <constraint firstItem="sLv-g1-c3g" firstAttribute="leading" secondItem="GTS-68-Msq" secondAttribute="leading" id="dIS-kr-B5K"/>
+                            <constraint firstItem="CQ3-1d-hM1" firstAttribute="leading" secondItem="GTS-68-Msq" secondAttribute="leading" id="f1J-MO-Leg"/>
                             <constraint firstItem="gM6-t8-UwI" firstAttribute="trailing" secondItem="GTS-68-Msq" secondAttribute="trailing" id="lF8-kD-gFq"/>
                             <constraint firstItem="sLv-g1-c3g" firstAttribute="trailing" secondItem="GTS-68-Msq" secondAttribute="trailing" id="oc0-zt-SfL"/>
                             <constraint firstItem="gM6-t8-UwI" firstAttribute="leading" secondItem="GTS-68-Msq" secondAttribute="leading" id="ofk-4i-3xQ"/>
-                            <constraint firstItem="sLv-g1-c3g" firstAttribute="top" secondItem="nMU-zO-UWz" secondAttribute="bottom" constant="8" id="zcq-6E-tRg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GTS-68-Msq"/>
                     </view>
@@ -124,7 +124,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchQuestions" destination="gM6-t8-UwI" id="pbS-cD-7La"/>
-                        <outlet property="sortBtn" destination="nMU-zO-UWz" id="MU7-eP-fqa"/>
+                        <outlet property="sortPicker" destination="CQ3-1d-hM1" id="bmp-mF-Yxu"/>
                         <outlet property="tableView" destination="sLv-g1-c3g" id="qoG-CB-SbF"/>
                         <segue destination="7k3-ii-mht" kind="show" identifier="qna" id="MeL-4z-MSJ"/>
                         <segue destination="J3A-Kt-fHG" kind="show" identifier="quest" id="0hw-8s-KDR"/>
@@ -557,6 +557,6 @@
         <image name="star.fill" catalog="system" width="64" height="58"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IRm-k1-BmW"/>
+        <segue reference="ydq-rU-aDd"/>
     </inferredMetricsTieBreakers>
 </document>

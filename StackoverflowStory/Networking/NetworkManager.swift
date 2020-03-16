@@ -10,6 +10,7 @@ import UIKit
 
 class NetworkManager {
     static let shared = NetworkManager()
+    
     private init() {}
     
     func getData(urlString: String, completion: @escaping(Data) -> Void) {
@@ -33,25 +34,28 @@ class NetworkManager {
         request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.httpBody = data
         let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
-//            if let response = response {
-//                print(response)
-//            }
+            if let response = response {
+                print(response)
+                NSLog(response.description)
+            }
             if let error = error {
                 print(error)
+                NSLog(error as? String ?? "")
             }
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     //print(json)
                     completion(json ?? ["": (Any).self])
-                    if let errorMessage = json?["error_message"] as? String? {
-                        let errorTitle = json?["error_message"] as? String
-//                        alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: viewController)
-//                        Alert.showAlert(Alert)
+//                    if let errorMessage = json?["error_message"] as? String? {
+//                        let errorTitle = json?["error_message"] as? String
+////                        alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: viewController)
+////                        Alert.showAlert(Alert)
                         
-                    }
+//                    }
                 } catch {
                     print(error)
+                    NSLog(error as? String ?? "")
                 }
             }
             //                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))

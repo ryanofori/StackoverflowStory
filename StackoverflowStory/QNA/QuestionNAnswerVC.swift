@@ -21,9 +21,6 @@ class QuestionNAnswerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("happy index")
-        print(questionNAnswerArray[mainIndex].body)
-        print(mainIndex)
         sectionManager()
     }
     
@@ -32,10 +29,12 @@ class QuestionNAnswerVC: UIViewController {
         if answerTxt.text?.count ?? 0 < 30 {
             alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText){ (json) in
+            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText) { (json) in
                 if let errorMessage = json["error_message"] as? String? {
                     let errorTitle = json["error_message"] as? String
                     self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have sent answer", viewController: self)
                 }
             }
         }
@@ -165,6 +164,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     if let errorMessage = json["error_message"] as? String? {
                         let errorTitle = json["error_message"] as? String
                         self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-upvoted a question", viewController: self)
                     }
                 }
             } else {
@@ -172,6 +173,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     if let errorMessage = json["error_message"] as? String? {
                         let errorTitle = json["error_message"] as? String
                         self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted a question", viewController: self)
                     }
                 }
             }
@@ -182,6 +185,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                 if let errorMessage = json["error_message"] as? String? {
                     let errorTitle = json["error_message"] as? String
                     self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted an answer", viewController: self)
                 }
             }
         }
@@ -198,6 +203,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     if let errorMessage = json["error_message"] as? String? {
                         let errorTitle = json["error_message"] as? String
                         self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-downvoted a question", viewController: self)
                     }
                 }
             } else {
@@ -205,6 +212,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     if let errorMessage = json["error_message"] as? String? {
                         let errorTitle = json["error_message"] as? String
                         self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted a question", viewController: self)
                     }
                 }
             }
@@ -215,6 +224,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                 if let errorMessage = json["error_message"] as? String? {
                     let errorTitle = json["error_message"] as? String
                     self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                } else {
+                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted an answer", viewController: self)
                 }
             }
         }
@@ -233,6 +244,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                             self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
                         }
 
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have unfavorited a question", viewController: self)
                     }
                 }
                 print("I have unfavorited")
@@ -245,6 +258,8 @@ extension QuestionNAnswerVC: QNACellDelegete {
                             self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
                         }
                         
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have favorited a question", viewController: self)
                     }
                 }
             }
