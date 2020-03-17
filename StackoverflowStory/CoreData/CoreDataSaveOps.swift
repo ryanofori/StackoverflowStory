@@ -12,6 +12,7 @@ class CoreDataSaveOps {
     private let coreDataManager = CoreDataManager.shared
     private let context = CoreDataManager.shared.mainContext
     static let shared = CoreDataSaveOps()
+    
     private init() {}
     
     func saveToken(tokenObject: AccessModel) {

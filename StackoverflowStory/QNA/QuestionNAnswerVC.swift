@@ -16,23 +16,24 @@ class QuestionNAnswerVC: UIViewController {
     var mainIndex = 0
     var sections = ["Question", "Answer"]
     var sectionAmountArray: [[String]] = []
-    var isFavortied = false
     let alert = Alert()
+    let urlPath = URLBuilder()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(questionNAnswerArray[mainIndex].question_id)
+        hideKeyboardWhenTappedAround()
         sectionManager()
     }
     
-    @IBAction func postAnswerBtn(_ sender: Any) {
+    @IBAction private func postAnswerBtn(_ sender: Any) {
         let bodyText = "&body=" + (answerTxt.text ?? "")
         if answerTxt.text?.count ?? 0 < 30 {
             alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/60604558/answers/add/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com" + bodyText) { (json) in
-                if let errorMessage = json["error_message"] as? String? {
-                    let errorTitle = json["error_message"] as? String
-                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + "60604558" + "/answers/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + bodyText) { (json) in
+                if json["error_message"] != nil {
+                        self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {
                     self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have sent answer", viewController: self)
                 }
@@ -154,25 +155,24 @@ extension QuestionNAnswerVC: UITableViewDataSource {
 extension QuestionNAnswerVC: QNACellDelegete {
     func didTapUpVote(section: Int, row: Int) {
         print("section: \(section) and row: \(row)")
+        let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if section == 0 {
             print(questionNAnswerArray[mainIndex].question_id)
             print("section:")
-            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
+            
             //upVotes a question
             if questionNAnswerArray[mainIndex].upvoted == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/upvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-upvoted a question", viewController: self)
                     }
                 }
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/upvote/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/upvote/", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted a question", viewController: self)
                     }
@@ -181,37 +181,35 @@ extension QuestionNAnswerVC: QNACellDelegete {
 
         } else {
             let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/upvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                if let errorMessage = json["error_message"] as? String? {
-                    let errorTitle = json["error_message"] as? String
-                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/upvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site ) { (json) in
+                if json["error_message"] != nil {
+                        self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {
                     self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted an answer", viewController: self)
                 }
             }
         }
         //answer
+        fetchUpdatedQNA(questionIdString: questionIdString)
     }
     
     func didTapDownVote(section: Int, row: Int) {
         print("section- \(section) and row- \(row)")
+        let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if section == 0 {
-            let questionId = String(questionNAnswerArray[mainIndex].question_id)
             //Downvote a question
             if questionNAnswerArray[mainIndex].downvoted == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/downvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-downvoted a question", viewController: self)
                     }
                 }
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionId + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/downvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted a question", viewController: self)
                     }
@@ -220,30 +218,26 @@ extension QuestionNAnswerVC: QNACellDelegete {
         } else {
             let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
             
-            NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/answers/" + answerIdString + "/downvote", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=d4sFBk6dHwrUwLdIPXX(ZQ))&site=stackoverflow.com") { (json) in
-                if let errorMessage = json["error_message"] as? String? {
-                    let errorTitle = json["error_message"] as? String
-                    self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
+            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/downvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                if json["error_message"] != nil {
+                        self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {
                     self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted an answer", viewController: self)
                 }
             }
         }
+        fetchUpdatedQNA(questionIdString: questionIdString)
     }
     
     func didTapFav(section: Int, row: Int) {
         print("section* \(section) and row* \(row)")
+        let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if section == 0 {
-            let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
             //fav a question
             if questionNAnswerArray[mainIndex].favorited == true {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/undo", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        DispatchQueue.main.async {
-                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
-                        }
-
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl +  "questions/" + questionIdString + "/favorite/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have unfavorited a question", viewController: self)
                     }
@@ -251,20 +245,31 @@ extension QuestionNAnswerVC: QNACellDelegete {
                 print("I have unfavorited")
                 
             } else {
-                NetworkManager.shared.postData(urlString: "https://api.stackexchange.com/2.2/questions/" + questionIdString + "/favorite/", param: "key=tUo34InxiBQXN3La2wI7Bw((&access_token=CpajrRM4j(1Nv9WChhQEWw))&site=stackoverflow.com") { (json) in
-                    if let errorMessage = json["error_message"] as? String? {
-                        let errorTitle = json["error_message"] as? String
-                        DispatchQueue.main.async {
-                            self.alert.showAlert(mesageTitle: errorTitle ?? "", messageDesc: errorMessage ?? "", viewController: self)
-                        }
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/favorite/", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                         
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have favorited a question", viewController: self)
                     }
                 }
             }
-            
+            fetchUpdatedQNA(questionIdString: questionIdString)
+        }
+        
+    }
+    func fetchUpdatedQNA(questionIdString: String) {
+        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "?order=desc&sort=activity&site=stackoverflow" + urlPath.filter + urlPath.newAccessToken + urlPath.key ) { (data) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                self.questionNAnswerArray[self.mainIndex] = root.items[0]
+                DispatchQueue.main.async {
+                    self.qNATableView.reloadData()
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
-    
 }

@@ -15,17 +15,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtm-DN-ea2">
-                                <rect key="frame" x="128" y="259" width="160" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtm-DN-ea2">
+                                <rect key="frame" x="127" y="259" width="160" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="0zD-qA-br1"/>
+                                </constraints>
                                 <state key="normal" title="Login to StackOverflow"/>
                                 <connections>
                                     <action selector="loginBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qq6-63-a5E"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11c-ty-nD2">
-                                <rect key="frame" x="154" y="409" width="107" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11c-ty-nD2">
+                                <rect key="frame" x="153.5" y="409" width="107" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="107" id="TIR-np-A6j"/>
+                                </constraints>
                                 <state key="normal" title="Biometric Login"/>
                                 <connections>
                                     <action selector="touchIdBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n2m-qz-hod"/>
@@ -33,6 +37,12 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="vtm-DN-ea2" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="7pX-rK-ETC"/>
+                            <constraint firstItem="11c-ty-nD2" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="sYM-A7-CLN"/>
+                            <constraint firstItem="11c-ty-nD2" firstAttribute="top" secondItem="vtm-DN-ea2" secondAttribute="bottom" constant="120" id="tSg-si-C3T"/>
+                            <constraint firstItem="vtm-DN-ea2" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="171" id="wae-Xx-TlH"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Login" id="JqL-Qm-Sn8"/>
@@ -78,6 +88,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="DIr-px-0ie" secondAttribute="trailing" constant="20" symbolic="YES" id="uRO-mV-K3t"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="questionTxt" destination="DIr-px-0ie" id="M7i-4l-OHN"/>
                                         </connections>
@@ -167,6 +178,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="z3u-3Y-4E6" secondAttribute="trailing" constant="20" symbolic="YES" id="gIf-8E-vEy"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="favTitle" destination="z3u-3Y-4E6" id="qiF-qQ-pfS"/>
                                         </connections>
@@ -240,9 +252,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xNG-cH-T58">
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xNG-cH-T58">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -251,6 +262,12 @@
                             </wkWebView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="xNG-cH-T58" firstAttribute="bottom" secondItem="jnw-uT-kL4" secondAttribute="bottom" id="Jd9-T7-0g2"/>
+                            <constraint firstItem="xNG-cH-T58" firstAttribute="top" secondItem="jnw-uT-kL4" secondAttribute="top" id="Rxl-Xe-xRK"/>
+                            <constraint firstItem="xNG-cH-T58" firstAttribute="trailing" secondItem="jnw-uT-kL4" secondAttribute="trailing" id="f4g-mL-yCd"/>
+                            <constraint firstItem="xNG-cH-T58" firstAttribute="leading" secondItem="jnw-uT-kL4" secondAttribute="leading" id="pC6-CH-H4h"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="jnw-uT-kL4"/>
                     </view>
                     <navigationItem key="navigationItem" id="8Gi-w8-7gB"/>
@@ -460,6 +477,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="aOJ-72-XT5" secondAttribute="trailing" constant="24" id="xzn-UE-DEN"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="checkmark" destination="rza-CA-3Bt" id="fH2-Tm-71N"/>
                                             <outlet property="downVote" destination="6a8-Xk-d0I" id="tpQ-ev-YNT"/>
@@ -481,11 +499,7 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7YI-oY-u8n">
-                                <rect key="frame" x="147" y="832" width="121" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="b0v-Yc-ghA"/>
-                                    <constraint firstAttribute="width" constant="121" id="rYK-PJ-tQc"/>
-                                </constraints>
+                                <rect key="frame" x="146.5" y="832" width="121" height="30"/>
                                 <state key="normal" title="Post Your Answer"/>
                                 <connections>
                                     <action selector="postAnswerBtn:" destination="7k3-ii-mht" eventType="touchUpInside" id="xWO-uc-3mE"/>
@@ -507,15 +521,15 @@
                         <constraints>
                             <constraint firstItem="9Kx-E9-9f3" firstAttribute="leading" secondItem="mr9-Uo-Fio" secondAttribute="leading" constant="20" id="10D-go-QrV"/>
                             <constraint firstItem="onZ-Dm-XfC" firstAttribute="top" secondItem="mS6-wg-iEj" secondAttribute="bottom" constant="8" id="1gt-Ey-y9x"/>
-                            <constraint firstItem="7YI-oY-u8n" firstAttribute="top" secondItem="9Kx-E9-9f3" secondAttribute="bottom" constant="8" id="3rj-wg-ICv"/>
                             <constraint firstItem="mS6-wg-iEj" firstAttribute="trailing" secondItem="mr9-Uo-Fio" secondAttribute="trailing" id="5vF-Nx-TPX"/>
                             <constraint firstItem="mS6-wg-iEj" firstAttribute="leading" secondItem="mr9-Uo-Fio" secondAttribute="leading" id="7E2-Km-C1A"/>
+                            <constraint firstItem="7YI-oY-u8n" firstAttribute="bottom" secondItem="mr9-Uo-Fio" secondAttribute="bottom" id="CP0-Xa-SyZ"/>
                             <constraint firstItem="9Kx-E9-9f3" firstAttribute="top" secondItem="onZ-Dm-XfC" secondAttribute="bottom" constant="8" id="GnV-9D-gB6"/>
                             <constraint firstItem="mS6-wg-iEj" firstAttribute="top" secondItem="mr9-Uo-Fio" secondAttribute="top" id="J0q-u8-iOb"/>
                             <constraint firstItem="onZ-Dm-XfC" firstAttribute="leading" secondItem="mr9-Uo-Fio" secondAttribute="leading" constant="20" id="U4D-mz-enY"/>
-                            <constraint firstItem="7YI-oY-u8n" firstAttribute="leading" secondItem="mr9-Uo-Fio" secondAttribute="leading" constant="147" id="Xlz-jt-mHJ"/>
-                            <constraint firstItem="7YI-oY-u8n" firstAttribute="bottom" secondItem="mr9-Uo-Fio" secondAttribute="bottom" id="j9B-Vd-1dv"/>
+                            <constraint firstItem="7YI-oY-u8n" firstAttribute="centerX" secondItem="mr9-Uo-Fio" secondAttribute="centerX" id="WDU-dE-IMW"/>
                             <constraint firstItem="mr9-Uo-Fio" firstAttribute="trailing" secondItem="9Kx-E9-9f3" secondAttribute="trailing" constant="20" id="xXX-rJ-WCW"/>
+                            <constraint firstItem="7YI-oY-u8n" firstAttribute="top" secondItem="9Kx-E9-9f3" secondAttribute="bottom" constant="8" id="z8g-VL-dKg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mr9-Uo-Fio"/>
                     </view>

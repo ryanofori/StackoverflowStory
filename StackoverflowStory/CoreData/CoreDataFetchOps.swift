@@ -12,6 +12,7 @@ class CoreDataFetchOps {
     private let coreDataManager = CoreDataManager.shared
     private let context = CoreDataManager.shared.mainContext
     static let shared = CoreDataFetchOps()
+    
     private init() {}
     
     func getAllToken() -> [Access] {
