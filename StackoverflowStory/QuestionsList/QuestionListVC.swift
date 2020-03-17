@@ -20,6 +20,7 @@ class QuestionListVC: UIViewController {
     var mainIndex = 0
     var fetchMore = false
     var searchString = ""
+    var trimString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +65,6 @@ class QuestionListVC: UIViewController {
 extension QuestionListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         mainIndex = indexPath.row
-        //        questionId = filteredArray[indexPath.row].question_id ?? 0
-        //        questionTitle = filteredArray[indexPath.row].title?.html2String ?? ""
         performSegue(withIdentifier: "qna", sender: nil)
     }
     
@@ -77,14 +76,20 @@ extension QuestionListVC: UITableViewDelegate {
         if fetchMore == true {
             pageCount += 1
             let pageString = String(pageCount)
-            
+            var pickedUrl = ""
+            print("trimString")
+            print(trimString)
+            print("searchString")
+            print(searchString)
             if searchString.isEmpty == true {
-                
+                pickedUrl = urlPath.baseUrl + "questions?page=" + pageString + "&order=desc&sort=activity" + urlPath.filter + "&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key
+                print(pickedUrl)
             } else {
-                
+                print(trimString)
+                pickedUrl = urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site
             }
             
-            NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions?page=" + pageString + "&order=desc&sort=activity" + urlPath.filter + "&sort=activity&site=stackoverflow") { (nextSet) in
+            NetworkManager.shared.getData(urlString: pickedUrl) { (nextSet) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: nextSet)
@@ -122,8 +127,10 @@ extension QuestionListVC: UISearchBarDelegate {
             tableView.reloadData()
         }
         if searchText.isEmpty == false {
-            let trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            NetworkManager.shared.getData(urlString: urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString ?? "") + urlPath.filter) { (searchTerm) in
+            trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            print("trimMan")
+            print(urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site)
+            NetworkManager.shared.getData(urlString: urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site) { (searchTerm) in
                 let jsonDecoder = JSONDecoder()
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: searchTerm)
@@ -156,7 +163,7 @@ extension QuestionListVC: UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print(sortArray[row])
         urlPath.sort = "&sort=" + sortArray[row]
-        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions?order=desc" + urlPath.sort + urlPath.filter + urlPath.sort + "&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (data) in
+        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions?order=desc" + urlPath.sort + urlPath.filter + urlPath.sort + urlPath.site + urlPath.newAccessToken + urlPath.key) { (data) in
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseQuestions.self, from: data)

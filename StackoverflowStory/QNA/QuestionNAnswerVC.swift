@@ -31,7 +31,7 @@ class QuestionNAnswerVC: UIViewController {
         if answerTxt.text?.count ?? 0 < 30 {
             alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
-            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + "60604558" + "/answers/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + bodyText) { (json) in
+            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + "60726631" + "/answers/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + bodyText) { (json) in
                 if json["error_message"] != nil {
                         self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {
