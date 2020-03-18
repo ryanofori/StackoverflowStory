@@ -10,9 +10,11 @@ import UIKit
 
 class Alert {
     func showAlert(mesageTitle: String, messageDesc: String, viewController: UIViewController) {
-        
+        DispatchQueue.main.async {
             let alertController = UIAlertController(title: mesageTitle, message: messageDesc, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
             viewController.present(alertController, animated: true, completion: nil)
+        }
+            
     }
 }

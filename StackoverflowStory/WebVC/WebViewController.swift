@@ -16,14 +16,10 @@ class WebViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //this should be passed from previous controller via segue
-        print(passedUrl)
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         webView.load(request)
         webView.navigationDelegate = self
-        //optionals
-        webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
     }
     func navigateToQuestions() {
@@ -34,13 +30,9 @@ class WebViewController: UIViewController {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let url = webView.url?.absoluteURL {
-            //if accesstoken contains used ...
-            print("url: \(url)")
             let urlString: String = url.absoluteString
             if urlString.contains("access_token=") {
-                print("you passed correct url")
                 let seperateEqual = urlString.components(separatedBy: "=")
-                print(seperateEqual[1])
                 let tokenExtra = seperateEqual[1]
                 let seperateAnd = tokenExtra.components(separatedBy: "&")
                 if !seperateAnd[0].isEmpty {
@@ -50,12 +42,12 @@ extension WebViewController: WKNavigationDelegate {
                     if totalTokens.count == 1 {
                         CoreDataUpdateOps.shared.updateToken(accessToken: seperateAnd[0])
                     } else {
+                        coreToken.token = seperateAnd[0]
                         CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
                     }
                     performSegue(withIdentifier: "qList", sender: nil)
                 }
             }
         }
-        print("Finished navigating to url \(String(describing: webView.url))")
     }
 }

@@ -20,7 +20,6 @@ class FavWebViewController: UIViewController {
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         favWebView.load(request)
-        //favWebView.allowsBackForwardNavigationGestures = true
         favWebView.allowsLinkPreview = true
     }
 }
