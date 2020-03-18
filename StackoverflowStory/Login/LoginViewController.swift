@@ -13,7 +13,6 @@ class LoginViewController: UIViewController {
     var urlPath = URLBuilder()
     
     @IBAction private func loginBtn(_ sender: Any) {
-//        obtainedInfo()
         getUserAccessToken()
     }
     @IBAction private func touchIdBtn(_ sender: Any) {
@@ -33,7 +32,7 @@ class LoginViewController: UIViewController {
             } catch {
                 self.userId = 0
                 self.obtainedInfo()
-                print(error.localizedDescription)
+                NSLog(error.localizedDescription)
             }
         }
     }
@@ -63,9 +62,10 @@ class LoginViewController: UIViewController {
     }
     
     func obtainedInfo() {
-        print(userId)
         if userId == 0 {
-            performSegue(withIdentifier: "web", sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "web", sender: nil)
+            }
         } else {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "info", sender: nil)

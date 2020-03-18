@@ -15,8 +15,7 @@ class CoreDataUpdateOps {
     func updateToken(accessToken: String) {
         let token = CoreDataFetchOps.shared.getAccessToken()
         token?.token = accessToken
-        
-        //fetch, change and save
+
         coreDataManager.saveContext(context: context)
     }
 }

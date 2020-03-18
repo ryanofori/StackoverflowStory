@@ -31,8 +31,6 @@ class QuestionListVC: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         hideKeyboardWhenTappedAround()
-        print(urlPath.newAccessToken)
-        print(itemsArray.count)
         NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions?page=1&order=desc" + urlPath.sort + urlPath.filter + urlPath.sort + "&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (data) in
             let jsonDecoder = JSONDecoder()
             do {
@@ -44,12 +42,11 @@ class QuestionListVC: UIViewController {
                     self.tableView.reloadData()
                 }
             } catch {
-                print(error.localizedDescription)
+                NSLog(error.localizedDescription)
             }
         }
     }
     
-    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let questionNAnswerVC = segue.destination as? QuestionNAnswerVC
         questionNAnswerVC?.mainIndex = mainIndex
@@ -77,15 +74,9 @@ extension QuestionListVC: UITableViewDelegate {
             pageCount += 1
             let pageString = String(pageCount)
             var pickedUrl = ""
-            print("trimString")
-            print(trimString)
-            print("searchString")
-            print(searchString)
             if searchString.isEmpty == true {
                 pickedUrl = urlPath.baseUrl + "questions?page=" + pageString + "&order=desc&sort=activity" + urlPath.filter + "&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key
-                print(pickedUrl)
             } else {
-                print(trimString)
                 pickedUrl = urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site
             }
             
@@ -98,7 +89,7 @@ extension QuestionListVC: UITableViewDelegate {
                         self.tableView.reloadData()
                     }
                 } catch {
-                    print(error.localizedDescription)
+                    NSLog(error.localizedDescription)
                 }
             }
             fetchMore = false
@@ -108,8 +99,6 @@ extension QuestionListVC: UITableViewDelegate {
 }
 extension QuestionListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("I'm messing with things!")
-        print(filteredArray.count)
         return filteredArray.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,15 +110,12 @@ extension QuestionListVC: UITableViewDataSource {
 
 extension QuestionListVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
         if searchText.isEmpty == true {
             filteredArray = itemsArray
             tableView.reloadData()
         }
         if searchText.isEmpty == false {
             trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            print("trimMan")
-            print(urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site)
             NetworkManager.shared.getData(urlString: urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site) { (searchTerm) in
                 let jsonDecoder = JSONDecoder()
                 do {
@@ -139,7 +125,7 @@ extension QuestionListVC: UISearchBarDelegate {
                         self.tableView.reloadData()
                     }
                 } catch {
-                    print(error.localizedDescription)
+                    NSLog(error.localizedDescription)
                 }
             }
         }
@@ -161,7 +147,6 @@ extension QuestionListVC: UIPickerViewDataSource {
         return sortArray[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(sortArray[row])
         urlPath.sort = "&sort=" + sortArray[row]
         NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions?order=desc" + urlPath.sort + urlPath.filter + urlPath.sort + urlPath.site + urlPath.newAccessToken + urlPath.key) { (data) in
             let jsonDecoder = JSONDecoder()
@@ -173,7 +158,7 @@ extension QuestionListVC: UIPickerViewDataSource {
                     self.tableView.reloadData()
                 }
             } catch {
-                print(error.localizedDescription)
+                NSLog(error.localizedDescription)
             }
         }
     }

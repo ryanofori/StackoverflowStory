@@ -16,7 +16,6 @@ class WebViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(passedUrl)
         guard let url = URL(string: passedUrl) else { return }
         let request = URLRequest(url: url)
         webView.load(request)
@@ -43,6 +42,7 @@ extension WebViewController: WKNavigationDelegate {
                     if totalTokens.count == 1 {
                         CoreDataUpdateOps.shared.updateToken(accessToken: seperateAnd[0])
                     } else {
+                        coreToken.token = seperateAnd[0]
                         CoreDataSaveOps.shared.saveToken(tokenObject: coreToken)
                     }
                     performSegue(withIdentifier: "qList", sender: nil)

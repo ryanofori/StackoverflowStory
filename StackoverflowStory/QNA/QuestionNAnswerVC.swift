@@ -21,17 +21,35 @@ class QuestionNAnswerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(questionNAnswerArray[mainIndex].question_id)
         hideKeyboardWhenTappedAround()
         sectionManager()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+    
+    @objc
+    func handleKeyboardNotification(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        let keyboardShowing = notification.name == UIResponder.keyboardWillShowNotification
+        
+        if keyboardShowing == true {
+            view.frame.origin.y = -keyboardSize.height
+        } else {
+            view.frame.origin.y = 0
+        }
+        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        })
+        
     }
     
     @IBAction private func postAnswerBtn(_ sender: Any) {
         let bodyText = "&body=" + (answerTxt.text ?? "")
+        let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if answerTxt.text?.count ?? 0 < 30 {
             alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
-            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + "60726631" + "/answers/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + bodyText) { (json) in
+            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/answers/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + bodyText) { (json) in
                 if json["error_message"] != nil {
                         self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {
@@ -42,8 +60,6 @@ class QuestionNAnswerVC: UIViewController {
     }
     
     func sectionManager() {
-        print("mainIndex")
-        print(mainIndex)
         for row in 0...1 {
             sectionAmountArray.append([String]())
             if row == 0 {
@@ -154,13 +170,8 @@ extension QuestionNAnswerVC: UITableViewDataSource {
 }
 extension QuestionNAnswerVC: QNACellDelegete {
     func didTapUpVote(section: Int, row: Int) {
-        print("section: \(section) and row: \(row)")
         let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if section == 0 {
-            print(questionNAnswerArray[mainIndex].question_id)
-            print("section:")
-            
-            //upVotes a question
             if questionNAnswerArray[mainIndex].upvoted == true {
                 NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/upvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
                     if json["error_message"] != nil {
@@ -178,26 +189,33 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     }
                 }
             }
-
         } else {
             let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
-            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/upvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site ) { (json) in
-                if json["error_message"] != nil {
-                        self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
-                } else {
-                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted an answer", viewController: self)
+            if questionNAnswerArray[mainIndex].answers?[row].upvoted == true {
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/upvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site ) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-upvoted an answer", viewController: self)
+                    }
+                }
+            } else {
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/upvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site ) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have upvoted an answer", viewController: self)
+                    }
                 }
             }
+            
         }
-        //answer
         fetchUpdatedQNA(questionIdString: questionIdString)
     }
     
     func didTapDownVote(section: Int, row: Int) {
-        print("section- \(section) and row- \(row)")
         let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
         if section == 0 {
-            //Downvote a question
             if questionNAnswerArray[mainIndex].downvoted == true {
                 NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/downvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
                     if json["error_message"] != nil {
@@ -217,12 +235,21 @@ extension QuestionNAnswerVC: QNACellDelegete {
             }
         } else {
             let answerIdString = questionNAnswerArray[mainIndex].answers?[row].answer_id.description ?? ""
-            
-            NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/downvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
-                if json["error_message"] != nil {
-                        self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
-                } else {
-                    self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted an answer", viewController: self)
+            if questionNAnswerArray[mainIndex].answers?[row].downvoted == true {
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/downvote/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have un-downvoted an answer", viewController: self)
+                    }
+                }
+            } else {
+                NetworkManager.shared.postData(urlString: urlPath.baseUrl + "answers/" + answerIdString + "/downvote", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
+                    if json["error_message"] != nil {
+                            self.alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
+                    } else {
+                        self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have downvoted an answer", viewController: self)
+                    }
                 }
             }
         }
@@ -230,10 +257,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
     }
     
     func didTapFav(section: Int, row: Int) {
-        print("section* \(section) and row* \(row)")
         let questionIdString = String(questionNAnswerArray[mainIndex].question_id)
-        if section == 0 {
-            //fav a question
             if questionNAnswerArray[mainIndex].favorited == true {
                 NetworkManager.shared.postData(urlString: urlPath.baseUrl +  "questions/" + questionIdString + "/favorite/undo", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
                     if json["error_message"] != nil {
@@ -242,8 +266,6 @@ extension QuestionNAnswerVC: QNACellDelegete {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have unfavorited a question", viewController: self)
                     }
                 }
-                print("I have unfavorited")
-                
             } else {
                 NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "/favorite/", param: urlPath.key + urlPath.newAccessToken + urlPath.site) { (json) in
                     if json["error_message"] != nil {
@@ -255,8 +277,6 @@ extension QuestionNAnswerVC: QNACellDelegete {
                 }
             }
             fetchUpdatedQNA(questionIdString: questionIdString)
-        }
-        
     }
     func fetchUpdatedQNA(questionIdString: String) {
         NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "?order=desc&sort=activity&site=stackoverflow" + urlPath.filter + urlPath.newAccessToken + urlPath.key ) { (data) in
@@ -268,7 +288,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
                     self.qNATableView.reloadData()
                 }
             } catch {
-                print(error.localizedDescription)
+                NSLog(error.localizedDescription)
             }
         }
     }

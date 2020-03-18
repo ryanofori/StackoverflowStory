@@ -44,15 +44,5 @@ class QNATableViewCell: UITableViewCell {
     @IBAction private func favBtn(_ sender: Any) {
         cellDelegate?.didTapFav(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
 }

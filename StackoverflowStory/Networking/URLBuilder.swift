@@ -22,11 +22,4 @@ class URLBuilder {
     let site = "&site=stackoverflow.com"
     let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access,private_info&redirect_uri=https://stackexchange.com/oauth/login_success"
     
-    func authUrlFull() -> String {
-        return authBaseUrl + clientId + scope + redirectUri + key + newAccessToken
-    }
-    //    func oauth2PostgetAcceesTokenURL() -> String {
-    //        return authBaseUrl + clientId + scope + redirectUri
-    //    }
-    
 }

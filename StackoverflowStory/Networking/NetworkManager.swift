@@ -34,11 +34,9 @@ class NetworkManager {
         request.httpBody = data
         let task = URLSession.shared.dataTask(with: request, completionHandler: {data, response, error  in
             if let response = response {
-//                print(response)
                 NSLog(response.description)
             }
             if let error = error {
-//                print(error)
                 NSLog(error as? String ?? "")
             }
             if let data = data {
@@ -46,12 +44,9 @@ class NetworkManager {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     completion(json ?? ["": (Any).self])
                 } catch {
-//                    print(error)
                     NSLog(error as? String ?? "")
                 }
             }
-            //                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
-            //print(response)
         })
         task.resume()
     }

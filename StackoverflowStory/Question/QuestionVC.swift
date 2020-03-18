@@ -27,7 +27,6 @@ class QuestionVC: UIViewController {
             alert.showAlert(mesageTitle: "Alert", messageDesc: "Body must be at least 30 characters", viewController: self)
         } else {
             NetworkManager.shared.postData(urlString: urlPath.baseUrl + "questions/add/", param: urlPath.key + urlPath.newAccessToken + urlPath.site + sendUrl) { (json) in
-                print(json)
                 if json["error_message"] != nil {
                         alert.showAlert(mesageTitle: json["error_name"] as? String ?? "", messageDesc: json["error_message"] as? String ?? "", viewController: self)
                 } else {

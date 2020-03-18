@@ -20,7 +20,6 @@ class CoreDataFetchOps {
         return coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context)
     }
     
-    //need to be a string
     func getAccessToken() -> Access? {
         let fetchRequest: NSFetchRequest<Access> = Access.fetchRequest()
         return coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context).first
