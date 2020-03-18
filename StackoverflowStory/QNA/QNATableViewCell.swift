@@ -28,29 +28,21 @@ class QNATableViewCell: UITableViewCell {
     weak var cellDelegate: QNACellDelegete?
     
     @IBOutlet weak var upVote: SubButton!
-    @IBAction func upVote(_ sender: Any) {
+    
+    @IBAction private func upVote(_ sender: Any) {
         cellDelegate?.didTapUpVote(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
     
     @IBOutlet weak var downVote: SubButton!
-    @IBAction func downVote(_ sender: Any) {
+    
+    @IBAction private func downVote(_ sender: Any) {
         cellDelegate?.didTapDownVote(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
     }
     
     @IBOutlet weak var favBtn: SubButton!
     
-    @IBAction func favBtn(_ sender: Any) {
+    @IBAction private func favBtn(_ sender: Any) {
         cellDelegate?.didTapFav(section: (sender as? SubButton)?.section ?? 0, row: (sender as? SubButton)?.row ?? 0)
-    }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

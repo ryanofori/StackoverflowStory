@@ -10,22 +10,16 @@ import UIKit
 
 class URLBuilder {
     let authBaseUrl = "https://stackoverflow.com/oauth/dialog"
-     let clientId = "?client_id=17028"
-     let scope = "&scope=write_access,private_info"
-    let and = "&"
-     let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
-     let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
-//     let testURl = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&site=stackoverflow"
-    var sort = "&sort=activity"
-    let fullUrl = "https://stackoverflow.com/oauth/dialog?client_id=17028&redirect_uri=https://stackexchange.com/oauth/login_success"
-     var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")
-     let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access,private_info&redirect_uri=https://stackexchange.com/oauth/login_success"
+    let clientId = "?client_id=17028"
+    let scope = "&scope=write_access,private_info"
+    let redirectUri = "&redirect_uri=https://stackexchange.com/oauth/login_success"
+    let baseUrl = "https://api.stackexchange.com/2.2/"
     
-    func authUrlFull() -> String {
-        return authBaseUrl + clientId + scope + redirectUri + key + newAccessToken
-    }
-//    func oauth2PostgetAcceesTokenURL() -> String {
-//        return authBaseUrl + clientId + scope + redirectUri
-//    }
+    let key = "&key=tUo34InxiBQXN3La2wI7Bw(("
+    var sort = "&sort=activity"
+    let filter = "&filter=!FnhX5sXiIrG3hI*4CNkiuWygeb"
+    var newAccessToken = "&access_token=" + (CoreDataFetchOps.shared.getAccessToken()?.token ?? "")
+    let site = "&site=stackoverflow.com"
+    let oauth2PostgetAcceesTokenURL = "https://stackoverflow.com/oauth/dialog?client_id=17028&scope=write_access,private_info&redirect_uri=https://stackexchange.com/oauth/login_success"
     
 }

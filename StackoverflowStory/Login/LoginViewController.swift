@@ -11,22 +11,28 @@ import UIKit
 class LoginViewController: UIViewController {
     var userId = 0
     var urlPath = URLBuilder()
-    @IBAction func loginBtn(_ sender: Any) {
-        obtainedInfo()
+    
+    @IBAction private func loginBtn(_ sender: Any) {
+        getUserAccessToken()
     }
-    @IBAction func touchIdBtn(_ sender: Any) {
+    @IBAction private func touchIdBtn(_ sender: Any) {
         performAuthOrFallback()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        NetworkManager.shared.getData(urlString: "https://api.stackexchange.com/2.2/me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
+    }
+    
+    func getUserAccessToken() {
+        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseUser.self, from: info)
                 self.userId = root.items[0].user_id ?? 0
+                self.obtainedInfo()
             } catch {
                 self.userId = 0
-                print(error.localizedDescription)
+                self.obtainedInfo()
+                NSLog(error.localizedDescription)
             }
         }
     }
@@ -43,7 +49,7 @@ class LoginViewController: UIViewController {
             context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in
                 DispatchQueue.main.async {
                     if success {
-                        self.obtainedInfo()
+                        self.getUserAccessToken()
                     } else {
                         self.performAuthOrFallback(true)
                     }
@@ -56,11 +62,14 @@ class LoginViewController: UIViewController {
     }
     
     func obtainedInfo() {
-        print(userId)
         if userId == 0 {
-            performSegue(withIdentifier: "web", sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "web", sender: nil)
+            }
         } else {
-            performSegue(withIdentifier: "info", sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "info", sender: nil)
+            }
         }
     }
     

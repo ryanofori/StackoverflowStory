@@ -12,6 +12,7 @@ class CoreDataFetchOps {
     private let coreDataManager = CoreDataManager.shared
     private let context = CoreDataManager.shared.mainContext
     static let shared = CoreDataFetchOps()
+    
     private init() {}
     
     func getAllToken() -> [Access] {
@@ -19,7 +20,6 @@ class CoreDataFetchOps {
         return coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context)
     }
     
-    //need to be a string
     func getAccessToken() -> Access? {
         let fetchRequest: NSFetchRequest<Access> = Access.fetchRequest()
         return coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context).first
