@@ -44,9 +44,8 @@ class LoginViewController: UIViewController {
         if fallback {
             policy = .deviceOwnerAuthentication
         }
-        //&error is address of error
         if context.canEvaluatePolicy(policy, error: &error) {
-            context.evaluatePolicy(policy, localizedReason: "Need bio auth") { success, autError in
+            context.evaluatePolicy(policy, localizedReason: "bio login auth") { success, autError in
                 DispatchQueue.main.async {
                     if success {
                         self.getUserAccessToken()
