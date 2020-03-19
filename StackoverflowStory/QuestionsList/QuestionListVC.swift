@@ -77,7 +77,7 @@ extension QuestionListVC: UITableViewDelegate {
             if searchString.isEmpty == true {
                 pickedUrl = urlPath.baseUrl + "questions?page=" + pageString + "&order=desc&sort=activity" + urlPath.filter + "&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key
             } else {
-                pickedUrl = urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site
+                pickedUrl = urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + "&page=" + pageString + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site
             }
             
             NetworkManager.shared.getData(urlString: pickedUrl) { (nextSet) in
@@ -121,6 +121,7 @@ extension QuestionListVC: UISearchBarDelegate {
                 do {
                     let root = try jsonDecoder.decode(ParseQuestions.self, from: searchTerm)
                     self.filteredArray = root.items
+                    self.searchString = searchText
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }

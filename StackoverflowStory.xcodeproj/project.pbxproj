@@ -41,6 +41,7 @@
 		7D550313241805FD003EFD5D /* SubButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D550312241805FD003EFD5D /* SubButton.swift */; };
 		7DBA762A24192AE0000BD168 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA762924192AE0000BD168 /* Alert.swift */; };
 		7DCF3BC324204AB400FBED75 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF3BC224204AB400FBED75 /* UIViewController.swift */; };
+		7DCF3C022422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		7D550312241805FD003EFD5D /* SubButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubButton.swift; sourceTree = "<group>"; };
 		7DBA762924192AE0000BD168 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		7DCF3BC224204AB400FBED75 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "411460__inspectorj__power-up-bright-a.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				7D55028E240EEB7F003EFD5D /* StackoverflowStory.entitlements */,
 				7D55025B240EEB70003EFD5D /* AppDelegate.swift */,
 				7D55030B24142508003EFD5D /* Networking */,
+				7DCF3C002422F99400FBED75 /* Sounds */,
 				7D55025D240EEB70003EFD5D /* SceneDelegate.swift */,
 				7D550261240EEB70003EFD5D /* Main.storyboard */,
 				7D550267240EEB75003EFD5D /* Assets.xcassets */,
@@ -288,6 +291,14 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
+		7DCF3C002422F99400FBED75 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -393,6 +404,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DCF3C022422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav in Resources */,
 				7D55026B240EEB75003EFD5D /* LaunchScreen.storyboard in Resources */,
 				7D550268240EEB75003EFD5D /* Assets.xcassets in Resources */,
 				7D550263240EEB70003EFD5D /* Main.storyboard in Resources */,
