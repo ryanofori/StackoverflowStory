@@ -6,6 +6,7 @@
 //  Copyright © 2020 Ryan Ofori. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
 
 class QuestionNAnswerVC: UIViewController {
@@ -18,6 +19,7 @@ class QuestionNAnswerVC: UIViewController {
     var sectionAmountArray: [[String]] = []
     let alert = Alert()
     let urlPath = URLBuilder()
+    var audioSound = AVAudioPlayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,7 +212,9 @@ extension QuestionNAnswerVC: QNACellDelegete {
             }
             
         }
-        fetchUpdatedQNA(questionIdString: questionIdString)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.fetchUpdatedQNA(questionIdString: questionIdString)
+        }
     }
     
     func didTapDownVote(section: Int, row: Int) {
@@ -253,7 +257,9 @@ extension QuestionNAnswerVC: QNACellDelegete {
                 }
             }
         }
-        fetchUpdatedQNA(questionIdString: questionIdString)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.fetchUpdatedQNA(questionIdString: questionIdString)
+        }
     }
     
     func didTapFav(section: Int, row: Int) {
@@ -273,10 +279,22 @@ extension QuestionNAnswerVC: QNACellDelegete {
                         
                     } else {
                         self.alert.showAlert(mesageTitle: "Success", messageDesc: "You have favorited a question", viewController: self)
+                        if let staredSound = Bundle.main.path(forResource: "411460__inspectorj__power-up-bright-a", ofType: "wav") {
+                            let soundUrl = URL(fileURLWithPath: staredSound)
+                            do {
+                                self.audioSound = try AVAudioPlayer(contentsOf: soundUrl)
+                                self.audioSound.play()
+                            } catch {
+                                
+                            }
+                        }
                     }
                 }
             }
-            fetchUpdatedQNA(questionIdString: questionIdString)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.fetchUpdatedQNA(questionIdString: questionIdString)
+        }
+            
     }
     func fetchUpdatedQNA(questionIdString: String) {
         NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "?order=desc&sort=activity&site=stackoverflow" + urlPath.filter + urlPath.newAccessToken + urlPath.key ) { (data) in
