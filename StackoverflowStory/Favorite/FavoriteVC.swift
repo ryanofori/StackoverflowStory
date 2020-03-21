@@ -11,6 +11,7 @@ import UIKit
 class FavoriteVC: UIViewController {
     
     @IBOutlet weak var favTableView: UITableView!
+    let queue = OperationQueue()
     var favArray = [Items]()
     var urlPath = URLBuilder()
     var passedUserId = 0
@@ -19,30 +20,38 @@ class FavoriteVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if passedUserId == 0 {
-            NetworkManager.shared.getData(urlString: urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
-                
-                let jsonDecoder = JSONDecoder()
-                do {
-                    let root = try jsonDecoder.decode(ParseUser.self, from: info)
-                    self.passedUserId = root.items[0].user_id ?? 0
-                } catch {
-                    NSLog(error.localizedDescription)
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
+            let oneBlock = BlockOperation {
+                NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (info) in
+                    
                     let jsonDecoder = JSONDecoder()
                     do {
-                        let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
-                        self.favArray = root.items
-                        DispatchQueue.main.async {
-                            self.favTableView.reloadData()
-                        }
+                        let root = try jsonDecoder.decode(ParseUser.self, from: info)
+                        self.passedUserId = root.items[0].user_id ?? 0
                     } catch {
                         NSLog(error.localizedDescription)
                     }
                 }
             }
+            
+            let twoBlock = BlockOperation {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
+                        let jsonDecoder = JSONDecoder()
+                        do {
+                            let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                            self.favArray = root.items
+                            DispatchQueue.main.async {
+                                self.favTableView.reloadData()
+                            }
+                        } catch {
+                            NSLog(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+            queue.addOperation(oneBlock)
+            queue.addOperation(twoBlock)
+            twoBlock.addDependency(oneBlock)
         }
         
     }

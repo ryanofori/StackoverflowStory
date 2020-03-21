@@ -42,6 +42,7 @@
 		7DBA762A24192AE0000BD168 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA762924192AE0000BD168 /* Alert.swift */; };
 		7DCF3BC324204AB400FBED75 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF3BC224204AB400FBED75 /* UIViewController.swift */; };
 		7DCF3C022422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */; };
+		7DCF3D00242498ED00FBED75 /* SubOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF3CFF242498EC00FBED75 /* SubOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		7DBA762924192AE0000BD168 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		7DCF3BC224204AB400FBED75 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "411460__inspectorj__power-up-bright-a.wav"; sourceTree = "<group>"; };
+		7DCF3CFF242498EC00FBED75 /* SubOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 				7D55030E2415D5B9003EFD5D /* ParseUser.swift */,
 				7DBA762924192AE0000BD168 /* Alert.swift */,
 				7D550312241805FD003EFD5D /* SubButton.swift */,
+				7DCF3CFF242498EC00FBED75 /* SubOperation.swift */,
 			);
 			path = StackoverflowStory;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DCF3D00242498ED00FBED75 /* SubOperation.swift in Sources */,
 				7DCF3BC324204AB400FBED75 /* UIViewController.swift in Sources */,
 				7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */,
 				7D5502D82410BE4D003EFD5D /* String.swift in Sources */,
