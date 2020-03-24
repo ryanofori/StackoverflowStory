@@ -59,6 +59,9 @@ class QuestionNAnswerVC: UIViewController {
                 }
             }
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.fetchUpdatedQNA(questionIdString: questionIdString)
+        }
     }
     
     func sectionManager() {
@@ -76,6 +79,21 @@ class QuestionNAnswerVC: UIViewController {
         }
     }
     
+    func fetchUpdatedQNA(questionIdString: String) {
+        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "?order=desc&sort=activity&site=stackoverflow" + urlPath.filter + urlPath.newAccessToken + urlPath.key ) { (data) in
+            let jsonDecoder = JSONDecoder()
+            do {
+                let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                self.questionNAnswerArray[self.mainIndex] = root.items[0]
+                DispatchQueue.main.async {
+                    self.qNATableView.reloadData()
+                }
+            } catch {
+                NSLog(error.localizedDescription)
+            }
+        }
+    }
+
 }
 extension QuestionNAnswerVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -111,7 +129,7 @@ extension QuestionNAnswerVC: UITableViewDataSource {
             } else {
                 cell?.checkmark.isHidden = true
             }
-            cell?.profileName.text = questionNAnswerArray[mainIndex].owner?.display_name
+            cell?.profileName.text = questionNAnswerArray[mainIndex].owner?.display_name?.html2String
             let tagCommaSeperatedString = questionNAnswerArray[mainIndex].tags?.joined(separator: ", ")
             cell?.tagsLbl.text = tagCommaSeperatedString
             cell?.tagsLbl.textColor = UIColor().colorFromHexString("39729D")
@@ -122,7 +140,6 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                 }
             }
             cell?.favBtn.isHidden = false
-            //if true yellow else false gray
             if questionNAnswerArray[mainIndex].upvoted == true {
                 cell?.upVote.tintColor = .yellow
             } else {
@@ -149,7 +166,7 @@ extension QuestionNAnswerVC: UITableViewDataSource {
             } else {
                 cell?.checkmark.isHidden = true
             }
-            cell?.profileName.text = questionNAnswerArray[mainIndex].answers?[indexType].owner?.display_name
+            cell?.profileName.text = questionNAnswerArray[mainIndex].answers?[indexType].owner?.display_name?.html2String
             cell?.reputationLbl.text = questionNAnswerArray[mainIndex].answers?[indexPath.row].owner?.reputation?.description
             cell?.tagsLbl.text = ""
             if let imageUrl = URL(string: questionNAnswerArray[mainIndex].answers?[indexType].owner?.profile_image ?? "") {
@@ -294,20 +311,7 @@ extension QuestionNAnswerVC: QNACellDelegete {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.fetchUpdatedQNA(questionIdString: questionIdString)
         }
-            
+        
     }
-    func fetchUpdatedQNA(questionIdString: String) {
-        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "questions/" + questionIdString + "?order=desc&sort=activity&site=stackoverflow" + urlPath.filter + urlPath.newAccessToken + urlPath.key ) { (data) in
-            let jsonDecoder = JSONDecoder()
-            do {
-                let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
-                self.questionNAnswerArray[self.mainIndex] = root.items[0]
-                DispatchQueue.main.async {
-                    self.qNATableView.reloadData()
-                }
-            } catch {
-                NSLog(error.localizedDescription)
-            }
-        }
-    }
+    
 }

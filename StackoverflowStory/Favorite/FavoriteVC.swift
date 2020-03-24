@@ -11,15 +11,19 @@ import UIKit
 class FavoriteVC: UIViewController {
     
     @IBOutlet weak var favTableView: UITableView!
+    let queue = OperationQueue()
     var favArray = [Items]()
     var urlPath = URLBuilder()
     var passedUserId = 0
+    var hasMore = false
+    var pageCount = 1
     var favURL = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if passedUserId == 0 {
-            NetworkManager.shared.getData(urlString: urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
+            
+            NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (info) in
                 
                 let jsonDecoder = JSONDecoder()
                 do {
@@ -29,6 +33,8 @@ class FavoriteVC: UIViewController {
                     NSLog(error.localizedDescription)
                 }
             }
+            
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
                     let jsonDecoder = JSONDecoder()
@@ -58,6 +64,29 @@ extension FavoriteVC: UITableViewDelegate {
         favURL = favArray[indexPath.row].link ?? ""
         performSegue(withIdentifier: "favWeb", sender: nil)
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == favArray.count - 1 {
+            if hasMore {
+                pageCount += 1
+                let pageString = String(pageCount)
+                NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?page=" + pageString + "&order=desc&sort=activity&site=stackoverflow"  + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
+                    let jsonDecoder = JSONDecoder()
+                    do {
+                        let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                        self.favArray += root.items
+                        self.hasMore = root.has_more
+                        DispatchQueue.main.async {
+                            self.favTableView.reloadData()
+                        }
+                    } catch {
+                        NSLog(error.localizedDescription)
+                    }
+                }
+            }
+        }
+    }
+    
 }
 extension FavoriteVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
