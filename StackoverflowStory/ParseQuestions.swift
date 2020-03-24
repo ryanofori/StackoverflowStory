@@ -10,6 +10,7 @@ import UIKit
 
 struct ParseQuestions: Codable {
     var items: [Items]
+    var has_more: Bool
 }
 struct Items: Codable {
     var favorited: Bool?

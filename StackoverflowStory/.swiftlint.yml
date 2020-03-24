@@ -97,6 +97,7 @@ identifier_name:
     - profile_image
     - display_name
     - user_id
+    - has_more
 number_separator:
   minimum_length: 5
 file_name:

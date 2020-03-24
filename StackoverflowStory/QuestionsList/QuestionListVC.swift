@@ -35,7 +35,6 @@ class QuestionListVC: UIViewController {
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
-                //            let itemsGroup = root.items[0]
                 self.itemsArray = root.items
                 self.filteredArray = self.itemsArray
                 DispatchQueue.main.async {
@@ -74,7 +73,7 @@ extension QuestionListVC: UITableViewDelegate {
             pageCount += 1
             let pageString = String(pageCount)
             var pickedUrl = ""
-            if searchString.isEmpty == true {
+            if searchString.isEmpty {
                 pickedUrl = urlPath.baseUrl + "questions?page=" + pageString + "&order=desc&sort=activity" + urlPath.filter + "&sort=activity&site=stackoverflow" + urlPath.newAccessToken + urlPath.key
             } else {
                 pickedUrl = urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + "&page=" + pageString + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site
@@ -110,11 +109,11 @@ extension QuestionListVC: UITableViewDataSource {
 
 extension QuestionListVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty == true {
+        if searchText.isEmpty {
             filteredArray = itemsArray
             tableView.reloadData()
         }
-        if searchText.isEmpty == false {
+        if !searchText.isEmpty {
             trimString = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             NetworkManager.shared.getData(urlString: urlPath.baseUrl + "search?order=desc" + urlPath.sort + "&intitle=" + (trimString) + urlPath.filter + urlPath.newAccessToken + urlPath.key + urlPath.site) { (searchTerm) in
                 let jsonDecoder = JSONDecoder()
