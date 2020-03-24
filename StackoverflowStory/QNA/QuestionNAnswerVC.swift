@@ -129,7 +129,7 @@ extension QuestionNAnswerVC: UITableViewDataSource {
             } else {
                 cell?.checkmark.isHidden = true
             }
-            cell?.profileName.text = questionNAnswerArray[mainIndex].owner?.display_name
+            cell?.profileName.text = questionNAnswerArray[mainIndex].owner?.display_name?.html2String
             let tagCommaSeperatedString = questionNAnswerArray[mainIndex].tags?.joined(separator: ", ")
             cell?.tagsLbl.text = tagCommaSeperatedString
             cell?.tagsLbl.textColor = UIColor().colorFromHexString("39729D")
@@ -140,7 +140,6 @@ extension QuestionNAnswerVC: UITableViewDataSource {
                 }
             }
             cell?.favBtn.isHidden = false
-            //if true yellow else false gray
             if questionNAnswerArray[mainIndex].upvoted == true {
                 cell?.upVote.tintColor = .yellow
             } else {
@@ -167,7 +166,7 @@ extension QuestionNAnswerVC: UITableViewDataSource {
             } else {
                 cell?.checkmark.isHidden = true
             }
-            cell?.profileName.text = questionNAnswerArray[mainIndex].answers?[indexType].owner?.display_name
+            cell?.profileName.text = questionNAnswerArray[mainIndex].answers?[indexType].owner?.display_name?.html2String
             cell?.reputationLbl.text = questionNAnswerArray[mainIndex].answers?[indexPath.row].owner?.reputation?.description
             cell?.tagsLbl.text = ""
             if let imageUrl = URL(string: questionNAnswerArray[mainIndex].answers?[indexType].owner?.profile_image ?? "") {

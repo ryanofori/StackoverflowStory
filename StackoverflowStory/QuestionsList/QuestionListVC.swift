@@ -35,7 +35,6 @@ class QuestionListVC: UIViewController {
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
-                //            let itemsGroup = root.items[0]
                 self.itemsArray = root.items
                 self.filteredArray = self.itemsArray
                 DispatchQueue.main.async {
