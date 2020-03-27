@@ -37,14 +37,14 @@ class NetworkManager {
                 NSLog(response.description)
             }
             if let error = error {
-                NSLog(error as? String ?? "")
+                NSLog(error.localizedDescription)
             }
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     completion(json ?? ["": (Any).self])
                 } catch {
-                    NSLog(error as? String ?? "")
+                    NSLog(error.localizedDescription)
                 }
             }
         })

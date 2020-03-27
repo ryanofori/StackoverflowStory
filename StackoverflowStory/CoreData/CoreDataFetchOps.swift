@@ -24,5 +24,4 @@ class CoreDataFetchOps {
         let fetchRequest: NSFetchRequest<Access> = Access.fetchRequest()
         return coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context).first
     }
-    
 }

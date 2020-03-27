@@ -17,5 +17,4 @@ class CoreDataDeleteOps {
         let token = coreDataManager.fetchObjects(fetchRequest: fetchRequest, context: context)
         coreDataManager.batchDelete(objects: token, context: context)
     }
-    
 }

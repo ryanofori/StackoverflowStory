@@ -10,5 +10,4 @@ import UIKit
 
 class QuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var questionTxt: UILabel!
-
 }

@@ -43,3 +43,38 @@ struct Owner: Codable {
     var profile_image: String?
     var display_name: String?
 }
+//class ParseQuestions: Codable {
+//    var items: [Items]
+//    var has_more: Bool
+//}
+//class Items: ParseQuestions {
+//    var favorited: Bool?
+//    var downvoted: Bool?
+//    var upvoted: Bool?
+//    var tags: [String]?
+//    var answers: [Answers]?
+//    var owner: Owner?
+//    var is_accepted: Bool?
+//    var answer_count: Int
+//    var score: Int?
+//    var question_id: Int
+//    var link: String?
+//    var title: String?
+//    var body: String?
+//    var user_id: Int?
+//}
+//class Answers: Items {
+//    var downvoted: Bool?
+//    var upvoted: Bool?
+//    var owner: Owner?
+//    var is_accepted: Bool?
+//    var score: Int?
+//    var answer_id: Int
+//    var title: String?
+//    var body: String?
+//}
+//class Owner: Items {
+//    var reputation: Int?
+//    var profile_image: String?
+//    var display_name: String?
+//}

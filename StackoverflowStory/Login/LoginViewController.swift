@@ -23,15 +23,15 @@ class LoginViewController: UIViewController {
     }
     
     func getUserAccessToken() {
-        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { (info) in
+        NetworkManager.shared.getData(urlString: urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + urlPath.newAccessToken + urlPath.key) { [weak self] (info) in
             let jsonDecoder = JSONDecoder()
             do {
                 let root = try jsonDecoder.decode(ParseUser.self, from: info)
-                self.userId = root.items[0].user_id ?? 0
-                self.obtainedInfo()
+                self?.userId = root.items[0].user_id ?? 0
+                self?.obtainedInfo()
             } catch {
-                self.userId = 0
-                self.obtainedInfo()
+                self?.userId = 0
+                self?.obtainedInfo()
                 NSLog(error.localizedDescription)
             }
         }
@@ -77,6 +77,5 @@ class LoginViewController: UIViewController {
         webVC?.passedUrl = urlPath.oauth2PostgetAcceesTokenURL
         let favVC = segue.destination as? FavoriteVC
         favVC?.passedUserId = userId
-        
     }
 }

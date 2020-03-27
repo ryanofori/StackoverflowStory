@@ -8,11 +8,11 @@
 import CoreData
 import UIKit
 
-class CoreDataManager: NSObject {
+class CoreDataManager {
     static let shared = CoreDataManager()
     private let dataModelName = "StackoverflowStory"
     
-    private override init() {}
+    private init() {}
     
     var mainContext: NSManagedObjectContext {
         return persistentContainer.viewContext
@@ -40,7 +40,7 @@ class CoreDataManager: NSObject {
             assertionFailure("Could not save: \(error)")
         }
     }
-    //reusable fetch method, <T: generic>
+    
     func fetchObjects<T>(fetchRequest: NSFetchRequest<T>, context: NSManagedObjectContext) -> [T] {
         do {
             return try context.fetch(fetchRequest)
@@ -58,4 +58,5 @@ class CoreDataManager: NSObject {
             assertionFailure("\(error)")
         }
     }
+    //Need to add migration (for lightweight migration)
 }

@@ -22,6 +22,7 @@ class WebViewController: UIViewController {
         webView.navigationDelegate = self
         webView.allowsLinkPreview = true
     }
+    
     func navigateToQuestions() {
         performSegue(withIdentifier: "qList", sender: nil)
     }

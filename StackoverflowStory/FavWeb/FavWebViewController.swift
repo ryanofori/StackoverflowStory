@@ -10,7 +10,6 @@ import UIKit
 import WebKit
 
 class FavWebViewController: UIViewController {
-    
     @IBOutlet weak var favWebView: WKWebView!
     
     var passedUrl = ""

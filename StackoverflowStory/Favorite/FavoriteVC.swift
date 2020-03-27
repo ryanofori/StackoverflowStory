@@ -13,6 +13,8 @@ class FavoriteVC: UIViewController {
     @IBOutlet weak var favTableView: UITableView!
     let queue = OperationQueue()
     let dependentQueue = OperationQueue()
+    let sema = DispatchSemaphore(value: 0)
+    
     var favArray = [Items]()
     var urlPath = URLBuilder()
     var passedUserId = 0
@@ -23,40 +25,42 @@ class FavoriteVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if passedUserId == 0 {
-
-            let sema = DispatchSemaphore(value: 0)
-            queue.addOperation {
-                NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (info) in
-                    let jsonDecoder = JSONDecoder()
-                    do {
-                        let root = try jsonDecoder.decode(ParseUser.self, from: info)
-                        self.passedUserId = root.items[0].user_id ?? 0
-                    } catch {
-                        NSLog(error.localizedDescription)
-                    }
-                    sema.signal()
+            getFavs()
+        }
+    }
+    
+    func getFavs() {
+        queue.addOperation {
+            NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "me?order=desc&sort=reputation&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (info) in
+                let jsonDecoder = JSONDecoder()
+                do {
+                    let root = try jsonDecoder.decode(ParseUser.self, from: info)
+                    self.passedUserId = root.items[0].user_id ?? 0
+                } catch {
+                    NSLog(error.localizedDescription)
                 }
-                _ = sema.wait(timeout: .distantFuture)
+                self.sema.signal()
             }
+            _ = self.sema.wait(timeout: .distantFuture)
+        }
 
-            dependentQueue.addOperation {
-                self.queue.waitUntilAllOperationsAreFinished()
-                NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
-                    let jsonDecoder = JSONDecoder()
-                    do {
-                        let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
-                        self.favArray = root.items
-                        self.hasMore = root.has_more
-                        DispatchQueue.main.async {
-                            self.favTableView.reloadData()
-                        }
-                    } catch {
-                        NSLog(error.localizedDescription)
+        dependentQueue.addOperation {
+            self.queue.waitUntilAllOperationsAreFinished()
+            NetworkManager.shared.getData(urlString: self.urlPath.baseUrl + "users/" + String(self.passedUserId) +  "/favorites?order=desc&sort=activity&site=stackoverflow" + self.urlPath.newAccessToken + self.urlPath.key) { (data) in
+                let jsonDecoder = JSONDecoder()
+                do {
+                    let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
+                    self.favArray = root.items
+                    self.hasMore = root.has_more
+                    
+                    DispatchQueue.main.async {
+                        self.favTableView.reloadData()
                     }
+                } catch {
+                    NSLog(error.localizedDescription)
                 }
             }
         }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -82,6 +86,7 @@ extension FavoriteVC: UITableViewDelegate {
                         let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
                         self.favArray += root.items
                         self.hasMore = root.has_more
+                        
                         DispatchQueue.main.async {
                             self.favTableView.reloadData()
                         }

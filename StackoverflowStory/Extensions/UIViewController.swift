@@ -8,21 +8,19 @@
 
 import UIKit
 
-extension UIViewController {
-    @objc
+@objc extension UIViewController {
+    
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
-    @objc
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
     
-    @objc
     func dismissKeyboard() {
         view.endEditing(true)
         view.frame.origin.y = 0

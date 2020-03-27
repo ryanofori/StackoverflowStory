@@ -15,6 +15,5 @@ class Alert {
             alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
             viewController.present(alertController, animated: true, completion: nil)
         }
-            
     }
 }

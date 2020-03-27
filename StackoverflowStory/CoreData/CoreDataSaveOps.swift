@@ -20,5 +20,4 @@ class CoreDataSaveOps {
         tokenManagedObject.token = tokenObject.token
         coreDataManager.saveContext(context: context)
     }
-    
 }

@@ -39,10 +39,10 @@
 		7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030C24142527003EFD5D /* NetworkManager.swift */; };
 		7D55030F2415D5BA003EFD5D /* ParseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55030E2415D5B9003EFD5D /* ParseUser.swift */; };
 		7D550313241805FD003EFD5D /* SubButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D550312241805FD003EFD5D /* SubButton.swift */; };
+		7DB2476F242B0988007ADE9A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB2476E242B0988007ADE9A /* WebKit.framework */; };
 		7DBA762A24192AE0000BD168 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA762924192AE0000BD168 /* Alert.swift */; };
 		7DCF3BC324204AB400FBED75 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF3BC224204AB400FBED75 /* UIViewController.swift */; };
 		7DCF3C022422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */; };
-		7DCF3D00242498ED00FBED75 /* IdSubOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF3CFF242498EC00FBED75 /* IdSubOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,10 +102,10 @@
 		7D55030C24142527003EFD5D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		7D55030E2415D5B9003EFD5D /* ParseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseUser.swift; sourceTree = "<group>"; };
 		7D550312241805FD003EFD5D /* SubButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubButton.swift; sourceTree = "<group>"; };
+		7DB2476E242B0988007ADE9A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		7DBA762924192AE0000BD168 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		7DCF3BC224204AB400FBED75 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		7DCF3C012422FA0400FBED75 /* 411460__inspectorj__power-up-bright-a.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "411460__inspectorj__power-up-bright-a.wav"; sourceTree = "<group>"; };
-		7DCF3CFF242498EC00FBED75 /* IdSubOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdSubOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DB2476F242B0988007ADE9A /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +141,7 @@
 				7D550274240EEB76003EFD5D /* StackoverflowStoryTests */,
 				7D55027F240EEB76003EFD5D /* StackoverflowStoryUITests */,
 				7D550259240EEB70003EFD5D /* Products */,
+				7DB2476D242B0987007ADE9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -178,7 +180,6 @@
 				7D55030E2415D5B9003EFD5D /* ParseUser.swift */,
 				7DBA762924192AE0000BD168 /* Alert.swift */,
 				7D550312241805FD003EFD5D /* SubButton.swift */,
-				7DCF3CFF242498EC00FBED75 /* IdSubOperation.swift */,
 			);
 			path = StackoverflowStory;
 			sourceTree = "<group>";
@@ -292,6 +293,14 @@
 				7D5502E12410CBE3003EFD5D /* URLBuilder.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		7DB2476D242B0987007ADE9A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7DB2476E242B0988007ADE9A /* WebKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7DCF3C002422F99400FBED75 /* Sounds */ = {
@@ -455,7 +464,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DCF3D00242498ED00FBED75 /* IdSubOperation.swift in Sources */,
 				7DCF3BC324204AB400FBED75 /* UIViewController.swift in Sources */,
 				7D55030D24142527003EFD5D /* NetworkManager.swift in Sources */,
 				7D5502D82410BE4D003EFD5D /* String.swift in Sources */,
