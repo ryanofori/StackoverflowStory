@@ -31,7 +31,7 @@ You can only answer a question every 30 seconds
 ## Resources
 https://api.stackexchange.com/
 
-###_(How to make your own)_
+### _(How to make your own)_
 - Create a stackoverflow account
 
 - Go to Stack Apps and register your app: https://stackapps.com/apps/oauth/register
