@@ -16,17 +16,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W3G-1A-Erh">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="753"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtm-DN-ea2">
-                                        <rect key="frame" x="127" y="285" width="160" height="30"/>
+                                        <rect key="frame" x="127" y="175" width="160" height="30"/>
                                         <state key="normal" title="Login to StackOverflow"/>
                                         <connections>
                                             <action selector="loginBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qq6-63-a5E"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11c-ty-nD2">
-                                        <rect key="frame" x="153.5" y="435" width="107" height="30"/>
+                                        <rect key="frame" x="153.5" y="285" width="107" height="30"/>
                                         <state key="normal" title="Biometric Login"/>
                                         <connections>
                                             <action selector="touchIdBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n2m-qz-hod"/>
@@ -34,12 +34,12 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="vtm-DN-ea2" firstAttribute="top" secondItem="W3G-1A-Erh" secondAttribute="top" constant="285" id="CDA-TB-F70"/>
+                                    <constraint firstItem="vtm-DN-ea2" firstAttribute="top" secondItem="W3G-1A-Erh" secondAttribute="top" constant="175" id="CDA-TB-F70"/>
                                     <constraint firstItem="11c-ty-nD2" firstAttribute="centerX" secondItem="W3G-1A-Erh" secondAttribute="centerX" id="Dl9-gD-lWl"/>
                                     <constraint firstAttribute="trailing" secondItem="vtm-DN-ea2" secondAttribute="trailing" constant="127" id="OB5-Eg-4xc"/>
                                     <constraint firstAttribute="bottom" secondItem="11c-ty-nD2" secondAttribute="bottom" constant="100" id="Omx-xP-Y5J"/>
                                     <constraint firstItem="vtm-DN-ea2" firstAttribute="leading" secondItem="W3G-1A-Erh" secondAttribute="leading" constant="127" id="bVL-MW-5gF"/>
-                                    <constraint firstItem="11c-ty-nD2" firstAttribute="top" secondItem="vtm-DN-ea2" secondAttribute="bottom" constant="120" id="eLx-as-ddA"/>
+                                    <constraint firstItem="11c-ty-nD2" firstAttribute="top" secondItem="vtm-DN-ea2" secondAttribute="bottom" constant="80" id="eLx-as-ddA"/>
                                     <constraint firstItem="vtm-DN-ea2" firstAttribute="centerX" secondItem="W3G-1A-Erh" secondAttribute="centerX" id="qIE-HA-dDa"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="OE5-GP-I9l"/>
@@ -48,13 +48,22 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Ual-bB-biJ"/>
                                 </connections>
                             </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is not the offical Stack Overflow app" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDH-zT-qrk">
+                                <rect key="frame" x="20" y="841" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="W3G-1A-Erh" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6S7-FU-BVj"/>
                             <constraint firstItem="W3G-1A-Erh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="SEW-5C-OaN"/>
-                            <constraint firstItem="W3G-1A-Erh" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="hq8-5b-HET"/>
+                            <constraint firstItem="cDH-zT-qrk" firstAttribute="centerX" secondItem="W3G-1A-Erh" secondAttribute="centerX" id="XAj-x5-2kU"/>
+                            <constraint firstItem="cDH-zT-qrk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="ZAk-vJ-PHN"/>
+                            <constraint firstItem="cDH-zT-qrk" firstAttribute="top" secondItem="W3G-1A-Erh" secondAttribute="bottom" id="dzd-W8-rhf"/>
                             <constraint firstItem="W3G-1A-Erh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wxK-Zr-N4G"/>
+                            <constraint firstItem="cDH-zT-qrk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="y8s-Jj-eLH"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -293,7 +302,7 @@
             </objects>
             <point key="canvasLocation" x="1838" y="-601"/>
         </scene>
-        <!--QuestionVC-->
+        <!--Question-->
         <scene sceneID="5T4-fx-TJM">
             <objects>
                 <viewController id="J3A-Kt-fHG" customClass="QuestionVC" customModule="StackoverflowStory" customModuleProvider="target" sceneMemberID="viewController">
@@ -369,7 +378,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r9i-s8-bc1"/>
                     </view>
-                    <navigationItem key="navigationItem" id="fCV-l2-7rp"/>
+                    <navigationItem key="navigationItem" title="Question" id="fCV-l2-7rp"/>
                     <connections>
                         <outlet property="bodyTxt" destination="91j-bB-POd" id="e3H-DL-aT5"/>
                         <outlet property="tagsTxt" destination="g2s-dZ-Plm" id="IVD-HS-sVZ"/>

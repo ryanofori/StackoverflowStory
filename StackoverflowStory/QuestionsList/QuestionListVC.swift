@@ -26,7 +26,7 @@ class QuestionListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.setHidesBackButton(true, animated: true)
-        let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.bordered, target: self, action: #selector(quest))
+        let newBackButton = UIBarButtonItem(title: "Question", style: UIBarButtonItem.Style.plain, target: self, action: #selector(quest))
         
         navigationItem.leftBarButtonItem = newBackButton
         
