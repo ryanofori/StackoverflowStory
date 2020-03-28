@@ -139,6 +139,12 @@ extension QuestionNAnswerVC: UITableViewDataSource {
             cell?.title.text = questionNAnswerArray[mainIndex].title?.html2String
             cell?.title.font = .boldSystemFont(ofSize: 17.0)
             cell?.questionAnswerDesc.text = questionNAnswerArray[mainIndex].body?.html2String
+//            let htmlData = Data(questionNAnswerArray[mainIndex].body!.utf8)
+//            if let attributedString = try? NSAttributedString(data: htmlData, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
+//                cell?.questionAnswerDesc.attributedText = attributedString
+//                cell?.questionAnswerDesc.font = .systemFont(ofSize: 17)
+//            }
+            
             cell?.score.text = questionNAnswerArray[mainIndex].score?.description
             if questionNAnswerArray[mainIndex].is_accepted == true {
                 cell?.checkmark.isHidden = false

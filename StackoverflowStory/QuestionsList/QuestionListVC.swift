@@ -46,7 +46,7 @@ class QuestionListVC: UIViewController {
                 let root = try jsonDecoder.decode(ParseQuestions.self, from: data)
                 self?.itemsArray = root.items
                 self?.filteredArray = root.items
-                
+                self?.fetchMore = root.has_more
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
                 }
